@@ -3,10 +3,14 @@ import csv
 
 class Workbook:
     def __init__(self):
-        self.category_dict = {'action': Category('action'),
-                              'drame': Category('drame'),
-                              'comedie': Category('comedie'),
-                              'documentaire': Category('documentaire')}
+        self.category_dict = dict()
+        try:
+            self.open_workbook()
+        except FileNotFoundError:
+            self.category_dict = {'action': Category('action'),
+                                  'drame': Category('drame'),
+                                  'comedie': Category('comedie'),
+                                  'documentaire': Category('documentaire')}
 
     def add_category(self, name):
         self.category_dict.update({name: Category(name)})
@@ -37,15 +41,43 @@ class Workbook:
             search_dict.update(self.category_dict[key].find_films(**kwargs))
         return search_dict
 
-    def write_search_results(self, path, *films):
-        pass  # TODO Call methods from the csv lib to write the list of films to the target location
-
-    # TODO open csv (possible issues, writing/opening the list/dict nested structure of the category_list.film_list) for
     def open_workbook(self):
-        pass
+        try:
+            with open('workbook_file.csv', newline='') as workbook_file:
+                workbook_reader = csv.reader(workbook_file, delimiter=',')
+                line_count = 0
+                for row in workbook_reader:
+                    if line_count == 0:
+                        pass
+                    else:
+                        if not self.category_dict.get(row[2]):
+                            self.add_category(row[2])
+                        self.category_dict.get(row[2]).add_film(row[0],row[1], director=row[3], actors=row[4],rating=row[5],comment=row[6])
+                    line_count += 1
+        except FileNotFoundError:
+            raise
 
     def save_workbook(self):
-        pass
+        to_write = list()
+        for k, v in self.category_dict.items():
+            for kf, vf in v.film_dict.items():
+                to_write.append(
+                    [kf, vf['year'], vf['category'], vf['director'], vf['actors'], vf['rating'], vf['comment']])
+        self.write_list('workbook_file.csv', to_write)
+
+    def write_list(self, path, to_write):
+        col_name = ['name', 'year', 'category', 'director', 'actors', 'rating', 'comment']
+        with open(path, mode='w', newline='') as workbook_file:
+            workbook_writer = csv.writer(workbook_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            workbook_writer.writerow(col_name)
+            workbook_writer.writerows(to_write)
+
+    def write_search_results(self, path, **search_dict):
+        to_write = list()
+        for k, v in search_dict.items():
+            to_write.append(
+                [k, v['year'], v['category'], v['director'], v['actors'], v['rating'], v['comment']])
+        self.write_list(path, to_write)
 
 
 class Category:
@@ -82,3 +114,4 @@ class Category:
 if __name__ == "__main__":
     debug_workbook = Workbook()
     input()
+
