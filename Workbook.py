@@ -21,21 +21,21 @@ class Workbook:
     def add_film(self, category, name, year, **kwargs):
         """
         kwargs:
-            'director': str
-            'actors':  list[str] TODO implement validation max 3
-            'rating': int < 10 TODO Implement validation max 10 in controler
-            'comment' str
+            director= str
+            actors=  list[str] TODO implement validation max 3
+            rating= int < 10 TODO Implement validation max 10 in controler
+            comment= str
         """
         self.category_dict.get(category).add_film(name, year, **kwargs)
 
     def edit_film(self, current_category, name, **kwargs):
         """
         kwargs:
-            'category': str
-            'director': str
-            'actors':  list[str] TODO implement validation max 3
-            'rating': int < 10 TODO Implement validation max 10 in controler
-            'comment' str
+            category= str
+            director= str
+            actors=  list[str] TODO implement validation max 3
+            rating= int < 10 TODO Implement validation max 10 in controler
+            comment= str
         """
         if 'category' in kwargs:
             current_categ = self.category_dict.get(current_category)
@@ -53,12 +53,12 @@ class Workbook:
     def find_films(self, **kwargs):
         """
         kwargs:
-            'name': str
-            'category': str
-            'director': str
-            'actors':  list[str] TODO implement validation max 3
-            'rating': int < 10 TODO Implement validation max 10 in controler
-            'comment' str
+            name= str
+            category= str
+            director= str
+            actors=  list[str] TODO implement validation max 3
+            rating= int < 10 TODO Implement validation max 10 in controler
+            comment= str
         """
         search_dict = dict()
         for key in self.category_dict.keys():
