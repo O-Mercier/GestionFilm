@@ -8,6 +8,6 @@ class WorkbookGUI:
         window.mainloop()
 
 
-
 if __name__ == "__main__":
     debug_workbook_gui = WorkbookGUI(wb.Workbook())
+    input()
