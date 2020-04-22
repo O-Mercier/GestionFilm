@@ -19,9 +19,24 @@ class Workbook:
         del self.category_dict[name]
 
     def add_film(self, category, name, year, **kwargs):
+        """
+        kwargs:
+            'director': str
+            'actors':  list[str] TODO implement validation max 3
+            'rating': int < 10 TODO Implement validation max 10 in controler
+            'comment' str
+        """
         self.category_dict.get(category).add_film(name, year, **kwargs)
 
     def edit_film(self, current_category, name, **kwargs):
+        """
+        kwargs:
+            'category': str
+            'director': str
+            'actors':  list[str] TODO implement validation max 3
+            'rating': int < 10 TODO Implement validation max 10 in controler
+            'comment' str
+        """
         if 'category' in kwargs:
             current_categ = self.category_dict.get(current_category)
             categ = self.category_dict.get(kwargs.get('category'))
@@ -36,6 +51,15 @@ class Workbook:
                     del self.category_dict[categ].film_dict[key]
 
     def find_films(self, **kwargs):
+        """
+        kwargs:
+            'name': str
+            'category': str
+            'director': str
+            'actors':  list[str] TODO implement validation max 3
+            'rating': int < 10 TODO Implement validation max 10 in controler
+            'comment' str
+        """
         search_dict = dict()
         for key in self.category_dict.keys():
             search_dict.update(self.category_dict[key].find_films(**kwargs))
@@ -72,13 +96,6 @@ class Workbook:
             workbook_writer.writerow(col_name)
             workbook_writer.writerows(to_write)
 
-    def write_search_results(self, path, **search_dict):
-        to_write = list()
-        for k, v in search_dict.items():
-            to_write.append(
-                [k, v['year'], v['category'], v['director'], v['actors'], v['rating'], v['comment']])
-        self.write_list(path, to_write)
-
 
 class Category:
     def __init__(self, name):
@@ -97,7 +114,7 @@ class Category:
         )
 
     def edit_film(self, name, **kwargs):
-        getattr(self, "film_dict")[name].update(kwargs)
+        self.film_dict[name].update(kwargs)
 
     def find_films(self, **kwargs):
         search_dict = dict()
