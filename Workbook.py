@@ -65,7 +65,7 @@ class Category:
         )
 
     def edit_film(self, name, **kwargs):
-        getattr(self, "film_list")[name].update(kwargs)
+        getattr(self, "film_dict")[name].update(kwargs)
 
     def find_films(self, **kwargs):
         search_dict = dict()
