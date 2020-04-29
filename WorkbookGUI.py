@@ -262,15 +262,17 @@ class SearchFilmGUI:
 
     def search_film_ctr(self):
         kwargs = dict()
-
-
-        self.workbook.find_films(self.category_combobox.get(),
-                               self.tittle_entry.get(),
-                               self.year_entry.get(),
-                               director=self.director_entry.get(),
-                               actors=[self.actor1_entry.get(), self.actor2_entry.get(), self.actor3_entry.get()],
-                               rating=self.rating_combobox.get()
-        )
+        if self.tittle_entry.get():
+            kwargs.update(name=self.tittle_entry.get())
+        if self.year_entry.get():
+            kwargs.update(year=self.tittle_entry.get())
+        if self.director_entry.get():
+            kwargs.update(name=self.tittle_entry.get())
+        if self.actor1_entry.get() or self.actor2_entry.get() or self.actor3_entry.get():
+            kwargs.update(actors=[self.actor1_entry.get(), self.actor2_entry.get(), self.actor3_entry.get()])
+        if self.rating_combobox.get():
+            kwargs.update(rating=self.rating_combobox.get())
+        self.SearchResultGUI(self.workbook.find_films(kwargs))
 
     def exit_window(self):
         self.film_frame.destroy()
