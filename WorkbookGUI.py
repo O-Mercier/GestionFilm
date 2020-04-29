@@ -4,7 +4,7 @@ import Workbook as Wb
 
 
 class WorkbookGUI:
-    # TODO change mainmenu to gerer films, gerer categorie, recherche, enregister (call save workbook, quitter
+    # TODO change mainmenu to gerer films, gerer categorie, recherche, enregister (call save workbook), quitter
     def __init__(self, workbook):
         self.workbook = workbook
         self.window = tk.Tk()
@@ -300,6 +300,18 @@ class DisplayListResultGUI:
         self.result_frame.configure(background='#AAC0AA')
         main_result_frame = tk.Frame(self.result_frame, background='#AAC0AA')
         main_result_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
+        cols = ('Nom', 'Année', 'Catégorie', 'Réalisateur', 'Acteurs', 'Note', 'Commentaire')
+        result_table = ttk.Treeview(main_result_frame, columns=cols, show='headings')
+        for col in cols:
+            result_table.heading(col, text=col)
+        result_table.grid(row=1, column=0, columnspan=2)
+        for k, v in results.items():
+            result_table.insert("", "end", values=(k, v.get('year'),v.get('category'),
+                                                   v.get('director'),v.get('director'),
+                                                   v.get('actors'), v.get('comment')))
+        self.set_active()
+
+
 
 
 
@@ -318,4 +330,3 @@ class GestionFilmsGUI:
 
 if __name__ == "__main__":
     debug_workbook_gui = WorkbookGUI(Wb.Workbook())
-

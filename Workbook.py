@@ -81,12 +81,24 @@ class Workbook:
         except FileNotFoundError:
             raise
 
+    def save_search(self, path, film_dict):
+        to_write = list()
+        for kf, vf in film_dict.items():
+            to_write.append([kf, vf['year'],
+                             vf['category'], vf['director'],
+                             vf['actors'], vf['rating'],
+                             vf['comment']])
+        self.write_list(path, to_write)
+
     def save_workbook(self):
         to_write = list()
         for k, v in self.category_dict.items():
             for kf, vf in v.film_dict.items():
                 to_write.append(
-                    [kf, vf['year'], vf['category'], vf['director'], vf['actors'], vf['rating'], vf['comment']])
+                    [kf, vf['year'],
+                     vf['category'], vf['director'],
+                     vf['actors'], vf['rating'],
+                     vf['comment']])
         self.write_list('workbook_file.csv', to_write)
 
     def write_list(self, path, to_write):
