@@ -7,10 +7,10 @@ class Workbook:
         try:
             self.open_workbook()
         except FileNotFoundError:
-            self.category_dict = {'action': Category('action'),
-                                  'drame': Category('drame'),
-                                  'comedie': Category('comedie'),
-                                  'documentaire': Category('documentaire')}
+            self.category_dict = {'Action': Category('action'),
+                                  'Drame': Category('drame'),
+                                  'Comedie': Category('comedie'),
+                                  'Documentaire': Category('documentaire')}
 
     def add_category(self, name):
         self.category_dict.update({name: Category(name)})
@@ -26,6 +26,7 @@ class Workbook:
             rating= int < 10 TODO Implement validation max 10 in controler
             comment= str
         """
+
         self.category_dict.get(category).add_film(name, year, **kwargs)
 
     def edit_film(self, current_category, name, **kwargs):

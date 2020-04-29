@@ -1,4 +1,7 @@
-import tkinter as tk, Workbook as wb
+import tkinter as tk
+import tkinter.ttk as ttk
+import Workbook as Wb
+
 
 
 class WorkbookGUI:
@@ -76,89 +79,85 @@ class AddFilmGUI:
         main_film_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
 
         # frame pour la saisie du titre
-        title_film_frame = tk.Frame(main_film_frame, background='#7A918D')
-        title_film_frame.place(relx=0, rely=0, relheight=0.08, relwidth=1)
-        tittle_label = tk.Label(title_film_frame, bg="#7A918D", fg="#AAC0AA", text="titre : ")
-        tittle_label.place(relx=0, rely=0, relheight=1, relwidth=0.3)
-        tittle_entry = tk.Entry(title_film_frame, bg="#7A918D", fg="#AAC0AA")
-        tittle_entry.place(relx=0.3, rely=0, relheight=1, relwidth=0.7)
+        self.title_film_frame = tk.Frame(main_film_frame, background='#7A918D')
+        self.title_film_frame.place(relx=0, rely=0, relheight=0.08, relwidth=1)
+        self.tittle_label = tk.Label(self.title_film_frame, bg="#7A918D", fg="#AAC0AA", text="titre : ")
+        self.tittle_label.place(relx=0, rely=0, relheight=1, relwidth=0.3)
+        self.tittle_entry = tk.Entry(self.title_film_frame, bg="#7A918D", fg="#AAC0AA")
+        self.tittle_entry.place(relx=0.3, rely=0, relheight=1, relwidth=0.7)
 
         # frame pour la saisie de la date de création
-        year_film_frame = tk.Frame(main_film_frame, background='#7A918D')
-        year_film_frame.place(relx=0, rely=0.08, relheight=0.08, relwidth=1)
-        year_label = tk.Label(year_film_frame, bg="#7A918D", fg="#AAC0AA", text="année : ")
-        year_label.place(relx=0, rely=0, relheight=1, relwidth=0.3)
-        year_entry = tk.Entry(year_film_frame, bg="#7A918D", fg="#AAC0AA")
-        year_entry.place(relx=0.3, rely=0, relheight=1, relwidth=0.7)
+        self.year_film_frame = tk.Frame(main_film_frame, background='#7A918D')
+        self.year_film_frame.place(relx=0, rely=0.08, relheight=0.08, relwidth=1)
+        self.year_label = tk.Label(self.year_film_frame, bg="#7A918D", fg="#AAC0AA", text="année : ")
+        self.year_label.place(relx=0, rely=0, relheight=1, relwidth=0.3)
+        self.year_entry = tk.Entry(self.year_film_frame, bg="#7A918D", fg="#AAC0AA")
+        self.year_entry.place(relx=0.3, rely=0, relheight=1, relwidth=0.7)
 
         # frame pour le réalisateur
-        director_film_frame = tk.Frame(main_film_frame, background='#7A918D')
-        director_film_frame.place(relx=0, rely=0.18, relheight=0.08, relwidth=1)
-        director_label = tk.Label(director_film_frame, bg="#7A918D", fg="#AAC0AA", text="réalisateur : ")
-        director_label.place(relx=0, rely=0, relheight=1, relwidth=0.3)
-        director_entry = tk.Entry(director_film_frame, bg="#7A918D", fg="#AAC0AA")
-        director_entry.place(relx=0.3, rely=0, relheight=1, relwidth=0.7)
+        self.director_film_frame = tk.Frame(main_film_frame, background='#7A918D')
+        self.director_film_frame.place(relx=0, rely=0.18, relheight=0.08, relwidth=1)
+        self.director_label = tk.Label(self.director_film_frame, bg="#7A918D", fg="#AAC0AA", text="réalisateur : ")
+        self.director_label.place(relx=0, rely=0, relheight=1, relwidth=0.3)
+        self.director_entry = tk.Entry(self.director_film_frame, bg="#7A918D", fg="#AAC0AA")
+        self.director_entry.place(relx=0.3, rely=0, relheight=1, relwidth=0.7)
 
         # frame pour la saisie de trois noms d'acteurs
-        actors_film_frame = tk.Frame(main_film_frame, background='#7A918D')
-        actors_film_frame.place(relx=0, rely=0.26, relheight=0.24, relwidth=1)
-        actors_label = tk.Label(actors_film_frame, bg="#7A918D", fg="#AAC0AA", text="acteurs")
-        actors_label.place(relx=0, rely=0, relheight=1, relwidth=0.3)
-        actor1_entry = tk.Entry(actors_film_frame, bg="#7A918D", fg="#AAC0AA")
-        actor1_entry.place(relx=0.3, rely=0, relheight=0.333, relwidth=0.7)
-        actor2_entry = tk.Entry(actors_film_frame, bg="#7A918D", fg="#AAC0AA")
-        actor2_entry.place(relx=0.3, rely=0.333, relheight=0.333, relwidth=0.7)
-        actor3_entry = tk.Entry(actors_film_frame, bg="#7A918D", fg="#AAC0AA")
-        actor3_entry.place(relx=0.3, rely=0.666, relheight=0.333, relwidth=0.7)
+        self.actors_film_frame = tk.Frame(main_film_frame, background='#7A918D')
+        self.actors_film_frame.place(relx=0, rely=0.26, relheight=0.24, relwidth=1)
+        self.actors_label = tk.Label(self.actors_film_frame, bg="#7A918D", fg="#AAC0AA", text="acteurs")
+        self.actors_label.place(relx=0, rely=0, relheight=1, relwidth=0.3)
+        self.actor1_entry = tk.Entry(self.actors_film_frame, bg="#7A918D", fg="#AAC0AA")
+        self.actor1_entry.place(relx=0.3, rely=0, relheight=0.333, relwidth=0.7)
+        self.actor2_entry = tk.Entry(self.actors_film_frame, bg="#7A918D", fg="#AAC0AA")
+        self.actor2_entry.place(relx=0.3, rely=0.333, relheight=0.333, relwidth=0.7)
+        self.actor3_entry = tk.Entry(self.actors_film_frame, bg="#7A918D", fg="#AAC0AA")
+        self.actor3_entry.place(relx=0.3, rely=0.666, relheight=0.333, relwidth=0.7)
 
         # frame pour la catégorie
-        category_film_frame = tk.Frame(main_film_frame, background='#7A918D')
-        category_film_frame.place(relx=0, rely=0.52, relheight=0.08, relwidth=1)
-        category_label = tk.Label(category_film_frame, bg="#7A918D", fg="#AAC0AA", text="categorie : ")
-        category_label.place(relx=0, rely=0, relheight=1, relwidth=0.3)
-        category_entry = tk.Entry(category_film_frame, bg="#7A918D", fg="#AAC0AA")
-        category_entry.place(relx=0.3, rely=0, relheight=1, relwidth=0.7)
+        self.category_film_frame = tk.Frame(main_film_frame, background='#7A918D')
+        self.category_film_frame.place(relx=0, rely=0.52, relheight=0.08, relwidth=1)
+        self.category_label = tk.Label(self.category_film_frame, bg="#7A918D", fg="#AAC0AA", text="categorie : ")
+        self.category_label.place(relx=0, rely=0, relheight=1, relwidth=0.3)
+        self.category_combobox = ttk.Combobox(self.category_film_frame, values=list(self.workbook.category_dict.keys()),
+                                              state='readonly')
+        self.category_combobox.current(0)
+        self.category_combobox.place(relx=0.3, rely=0, relheight=1, relwidth=0.7)
 
         # frame pour les commentaires
-        commentary_film_frame = tk.Frame(main_film_frame, background='#7A918D')
-        commentary_film_frame.place(relx=0, rely=0.62, relheight=0.2, relwidth=1)
-        commentary_label = tk.Label(commentary_film_frame, bg="#7A918D", fg="#AAC0AA", text="commentaires : ")
-        commentary_label.place(relx=0, rely=0, relheight=0.2, relwidth=1)
-        commentary_text = tk.Text(commentary_film_frame, bg="#7A918D", fg="#AAC0AA")
-        commentary_text.place(relx=0, rely=0.2, relheight=0.8, relwidth=1)
+        self.commentary_film_frame = tk.Frame(main_film_frame, background='#7A918D')
+        self.commentary_film_frame.place(relx=0, rely=0.62, relheight=0.2, relwidth=1)
+        self.commentary_label = tk.Label(self.commentary_film_frame, bg="#7A918D", fg="#AAC0AA", text="commentaires : ")
+        self.commentary_label.place(relx=0, rely=0, relheight=0.2, relwidth=1)
+        self.commentary_text = tk.Text(self.commentary_film_frame, bg="#7A918D", fg="#AAC0AA")
+        self.commentary_text.place(relx=0, rely=0.2, relheight=0.8, relwidth=1)
 
         # frame pour fermeture de la saisie
-        buttons_film_frame = tk.Frame(main_film_frame, background='#7A918D')
-        buttons_film_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1)
-        add_button = tk.Button(buttons_film_frame, bg="#7A918D", fg="#AAC0AA", text="ajouter")
-        add_button.place(relx=0, rely=0, relheight=1, relwidth=0.5)
-        add_button.bind("<Button-1>", lambda e: self.add_film_ctr())
-        cancel_button = tk.Button(buttons_film_frame, bg="#7A918D", fg="#AAC0AA", text="annuler",
-                                  command=self.exit_window)
-        cancel_button.place(relx=0.5, rely=0, relheight=1, relwidth=0.5)
+        self.buttons_film_frame = tk.Frame(main_film_frame, background='#7A918D')
+        self.buttons_film_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1)
+        self.add_button = tk.Button(self.buttons_film_frame, bg="#7A918D",
+                                    fg="#AAC0AA", text="ajouter",
+                                    command=self.add_film_ctr)
+        self.add_button.place(relx=0, rely=0, relheight=1, relwidth=0.5)
+        self.cancel_button = tk.Button(self.buttons_film_frame, bg="#7A918D",
+                                       fg="#AAC0AA", text="annuler",
+                                       command=self.exit_window)
+        self.cancel_button.place(relx=0.5, rely=0, relheight=1, relwidth=0.5)
 
-        self.setActive()
+        self.set_active()
 
     def add_film_ctr(self):
-        category = self.category_entry.get()
-        name = self.tittle_entry.get()
-        year = self.year_entry.get()
-        add_film_kwargs = dict()
-        add_film_kwargs.update('director', self.director_entry.get())
-        add_film_kwargs.update('actors', [
-            self.actor1_entry.get(),
-            self.actor2_entry.get(),
-            self.actor3_entry.get()
-        ])
-        # add_film_kwargs.update('rating', ) TODO: Add rating drop down menu (1-10)
-        add_film_kwargs.update('comment', self.commentary_text.get())
-
-        self.workbook.add_film(category, name, year, add_film_kwargs)
+        self.workbook.add_film(self.category_entry.get(),
+                               self.tittle_entry.get(),
+                               self.year_entry.get(),
+                               director=self.director_entry.get(),
+                               actors=[self.actor1_entry.get(), self.actor2_entry.get(), self.actor3_entry.get()],
+                               comment=self.commentary_text.get('1.0', tk.END))
 
     def exit_window(self):
         self.film_frame.destroy()
 
-    def setActive(self):
+    def set_active(self):
         self.film_frame.lift()
         self.film_frame.focus_force()
         self.film_frame.grab_set()
@@ -166,5 +165,5 @@ class AddFilmGUI:
 
 
 if __name__ == "__main__":
-    debug_workbook_gui = WorkbookGUI(wb.Workbook())
-    input()
+    debug_workbook_gui = WorkbookGUI(Wb.Workbook())
+
