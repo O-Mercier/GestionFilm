@@ -284,7 +284,7 @@ class SearchFilmGUI:
         self.film_frame.grab_release()
 
     class SearchResultGUI:
-        def __init__(self, results):
+        def __init__(self, results): # TODO implement listbox treeview or grid
             self.result_frame = tk.Tk()
             self.result_frame.title("Recherche de film")
             self.result_frame.overrideredirect(1)

@@ -26,7 +26,6 @@ class Workbook:
             rating= int < 10
             comment= str
         """
-
         self.category_dict.get(category).add_film(name, year, **kwargs)
 
     def edit_film(self, current_category, name, **kwargs):
