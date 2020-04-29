@@ -72,7 +72,7 @@ class Workbook:
                 line_count = 0
                 for row in workbook_reader:
                     if line_count == 0:
-                        pass
+                        pass  # TODO
                     else:
                         if not self.category_dict.get(row[2]):
                             self.add_category(row[2])

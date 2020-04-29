@@ -4,7 +4,6 @@ import Workbook as Wb
 
 
 class WorkbookGUI:
-    #
     def __init__(self, workbook):
         self.workbook = workbook
         self.window = tk.Tk()
@@ -26,12 +25,12 @@ class WorkbookGUI:
                                  bg="#7A918D", fg="#AAC0AA")
         btn_add_film.pack(fill="both", expand="true")
 
-        btn_search_film = tk.Button(main_menu_frame, text="catégories", command=self.seach_film_frame,
+        btn_search_film = tk.Button(main_menu_frame, text="catégories",
                                     bd=0, activeforeground="#DCEED1", activebackground="#A18276",
                                     bg="#7A918D", fg="#AAC0AA")
         btn_search_film.pack(fill="both", expand="true")
 
-        btn_remove_film = tk.Button(main_menu_frame, text="recherche", bd=0,
+        btn_remove_film = tk.Button(main_menu_frame, text="recherche", bd=0, command=self.seach_film_frame,
                                     activeforeground="#DCEED1", activebackground="#A18276", bg="#7A918D", fg="#AAC0AA")
         btn_remove_film.pack(fill="both", expand="true")
 
@@ -277,6 +276,7 @@ class SearchFilmGUI:
         self.film_frame.grab_set()
         self.film_frame.grab_release()
 
+    #test
 
 class DisplayListResultGUI:
     def __init__(self, results):  # TODO implement listbox treeview or grid, implement save to csv option
