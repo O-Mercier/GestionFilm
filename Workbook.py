@@ -23,7 +23,7 @@ class Workbook:
         kwargs:
             director= str
             actors=  list[str]
-            rating= int < 10 TODO Implement validation max 10 in controler
+            rating= int < 10
             comment= str
         """
 
@@ -35,7 +35,7 @@ class Workbook:
             category= str
             director= str
             actors=  list[str]
-            rating= int < 10 TODO Implement validation max 10 in controler
+            rating= int < 10
             comment= str
         """
         if 'category' in kwargs:
@@ -58,7 +58,7 @@ class Workbook:
             category= str
             director= str
             actors=  list[str]
-            rating= int < 10 TODO Implement validation max 10 in controler
+            rating= int < 10
             comment= str
         """
         search_dict = dict()
