@@ -4,6 +4,7 @@ import Workbook as Wb
 
 
 class WorkbookGUI:
+    # TODO change mainmenu to gerer films, gerer categorie, recherche, enregister (call save workbook, quitter
     def __init__(self, workbook):
         self.workbook = workbook
         self.window = tk.Tk()
@@ -242,8 +243,8 @@ class SearchFilmGUI:
                                               state='readonly')
         self.category_combobox.current(0)
         self.category_combobox.place(relx=0.3, rely=0, relheight=0.5, relwidth=0.7)
-        self.note_label = tk.Label(self.category_film_frame, bg="#7A918D", fg="#AAC0AA", text="Note : ")
-        self.note_label.place(relx=0.3, rely=0.5, relheight=0.5, relwidth=0.7)
+        self.note_label = tk.Label(self.category_film_frame, bg="#7A918D", fg="#AAC0AA", text="Note : ") # TODO Label not working
+        self.note_label.place(relx=0, rely=0.5, relheight=0.5, relwidth=0.7)
         self.rating_combobox = ttk.Combobox(self.category_film_frame, values=list(range(0, 11)), state='readonly')
         self.rating_combobox.place(relx=0.3, rely=0.5, relheight=0.5, relwidth=0.7)
 
@@ -272,7 +273,7 @@ class SearchFilmGUI:
             kwargs.update(actors=[self.actor1_entry.get(), self.actor2_entry.get(), self.actor3_entry.get()])
         if self.rating_combobox.get():
             kwargs.update(rating=self.rating_combobox.get())
-        self.SearchResultGUI(self.workbook.find_films(kwargs))
+        DisplayListResultGUI(self.workbook.find_films(kwargs))
 
     def exit_window(self):
         self.film_frame.destroy()
@@ -283,21 +284,36 @@ class SearchFilmGUI:
         self.film_frame.grab_set()
         self.film_frame.grab_release()
 
-    class SearchResultGUI:
-        def __init__(self, results):  # TODO implement listbox treeview or grid
-            self.result_frame = tk.Tk()
-            self.result_frame.title("Recherche de film")
-            self.result_frame.overrideredirect(1)
-            w = 600
-            h = 500
-            ws = self.result_frame.winfo_screenwidth()  # width of the screen
-            hs = self.result_frame.winfo_screenheight()  # height of the screen
-            x = (ws / 2) - (w / 2)
-            y = (hs / 2) - (h / 2)
-            self.result_frame.geometry('%dx%d+%d+%d' % (w, h, x, y))
-            self.result_frame.configure(background='#AAC0AA')
-            main_result_frame = tk.Frame(self.result_frame, background='#AAC0AA')
-            main_result_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
+
+class DisplayListResultGUI:
+    def __init__(self, results):  # TODO implement listbox treeview or grid, implement save to csv option
+        self.result_frame = tk.Tk()
+        self.result_frame.title("Recherche de film")
+        self.result_frame.overrideredirect(1)
+        w = 600
+        h = 500
+        ws = self.result_frame.winfo_screenwidth()  # width of the screen
+        hs = self.result_frame.winfo_screenheight()  # height of the screen
+        x = (ws / 2) - (w / 2)
+        y = (hs / 2) - (h / 2)
+        self.result_frame.geometry('%dx%d+%d+%d' % (w, h, x, y))
+        self.result_frame.configure(background='#AAC0AA')
+        main_result_frame = tk.Frame(self.result_frame, background='#AAC0AA')
+        main_result_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
+
+
+
+class GestionCategGUI:
+    # TODO implement add film, edit film, delete film
+    def __init__(self):
+        pass
+
+
+class GestionFilmsGUI:
+    # TODO implement add categ, delete categ, display categ (will use find film)
+    def __init__(self):
+        pass
+
 
 
 if __name__ == "__main__":
