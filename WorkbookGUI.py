@@ -132,15 +132,15 @@ class AddFilmGUI:
         buttons_film_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1)
         add_button = tk.Button(buttons_film_frame, bg="#7A918D", fg="#AAC0AA", text="ajouter")
         add_button.place(relx=0, rely=0, relheight=1, relwidth=0.5)
-        add_button.bind("<Button-1>", self.add_film_ctr(workbook))
+        add_button.bind("<Button-1>", lambda e: self.add_film_ctr())
         cancel_button = tk.Button(buttons_film_frame, bg="#7A918D", fg="#AAC0AA", text="annuler",
                                   command=self.exit_window)
         cancel_button.place(relx=0.5, rely=0, relheight=1, relwidth=0.5)
 
         self.setActive()
 
-    def add_film_ctr(self, workbook):
-        category = self.category_entry.get() # TODO: no clue why that's fucked
+    def add_film_ctr(self):
+        category = self.category_entry.get()
         name = self.tittle_entry.get()
         year = self.year_entry.get()
         add_film_kwargs = dict()
@@ -153,7 +153,7 @@ class AddFilmGUI:
         # add_film_kwargs.update('rating', ) TODO: Add rating drop down menu (1-10)
         add_film_kwargs.update('comment', self.commentary_text.get())
 
-        workbook.add_film(category, name, year, add_film_kwargs)
+        self.workbook.add_film(category, name, year, add_film_kwargs)
 
     def exit_window(self):
         self.film_frame.destroy()
