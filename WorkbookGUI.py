@@ -311,6 +311,15 @@ class DisplayListResultGUI:
                                                    v.get('actors'), v.get('comment')))
         self.set_active()
 
+    def exit_window(self):
+        self.result_frame.destroy()
+
+    def set_active(self):
+        self.result_frame.lift()
+        self.result_frame.focus_force()
+        self.result_frame.grab_set()
+        self.result_frame.grab_release()
+
 
 
 
