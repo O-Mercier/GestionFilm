@@ -300,9 +300,6 @@ class SearchFilmGUI:
             main_result_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
 
 
-
-
-
 if __name__ == "__main__":
     debug_workbook_gui = WorkbookGUI(Wb.Workbook())
 
