@@ -22,7 +22,7 @@ class Workbook:
         """
         kwargs:
             director= str
-            actors=  list[str] TODO implement validation max 3
+            actors=  list[str]
             rating= int < 10 TODO Implement validation max 10 in controler
             comment= str
         """
@@ -33,7 +33,7 @@ class Workbook:
         kwargs:
             category= str
             director= str
-            actors=  list[str] TODO implement validation max 3
+            actors=  list[str]
             rating= int < 10 TODO Implement validation max 10 in controler
             comment= str
         """
@@ -56,7 +56,7 @@ class Workbook:
             name= str
             category= str
             director= str
-            actors=  list[str] TODO implement validation max 3
+            actors=  list[str]
             rating= int < 10 TODO Implement validation max 10 in controler
             comment= str
         """
