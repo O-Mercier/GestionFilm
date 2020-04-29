@@ -132,8 +132,11 @@ class Category:
         search_dict = dict()
         for key in self.film_dict.keys():
             for kw in kwargs.keys():
-                if kwargs[kw] == self.film_dict[key][kw]:
-                    search_dict[key] = self.film_dict[key]
+                if kw == 'actors':
+                    pass  # TODO
+                else:
+                    if kwargs[kw] == self.film_dict[key][kw]:
+                        search_dict[key] = self.film_dict[key]
         return search_dict
 
     def remove_films(self, name):

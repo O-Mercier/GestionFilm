@@ -273,7 +273,7 @@ class SearchFilmGUI:
             kwargs.update(actors=[self.actor1_entry.get(), self.actor2_entry.get(), self.actor3_entry.get()])
         if self.rating_combobox.get():
             kwargs.update(rating=self.rating_combobox.get())
-        DisplayListResultGUI(self.workbook.find_films(kwargs))
+        DisplayListResultGUI(self.workbook.find_films(**kwargs))
 
     def exit_window(self):
         self.film_frame.destroy()
@@ -304,10 +304,10 @@ class DisplayListResultGUI:
         result_table = ttk.Treeview(main_result_frame, columns=cols, show='headings')
         for col in cols:
             result_table.heading(col, text=col)
-        result_table.grid(row=1, column=0, columnspan=2)
+        result_table.grid(row=1, column=7, columnspan=2)
         for k, v in results.items():
-            result_table.insert("", "end", values=(k, v.get('year'),v.get('category'),
-                                                   v.get('director'),v.get('director'),
+            result_table.insert("", "end", values=(k, v.get('year'), v.get('category'),
+                                                   v.get('director'), v.get('director'),
                                                    v.get('actors'), v.get('comment')))
         self.set_active()
 
