@@ -4,7 +4,7 @@ import Workbook as Wb
 
 
 class WorkbookGUI:
-    # TODO change mainmenu to gerer films, gerer categorie, recherche, enregister (call save workbook), quitter
+    #
     def __init__(self, workbook):
         self.workbook = workbook
         self.window = tk.Tk()
@@ -21,32 +21,23 @@ class WorkbookGUI:
         main_menu_frame = tk.Frame(self.window)
         main_menu_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
 
-        btn_add_film = tk.Button(main_menu_frame, text="ajouter un film", command=self.add_film_frame,
+        btn_add_film = tk.Button(main_menu_frame, text="films", command=self.add_film_frame,
                                  bd=0, activeforeground="#DCEED1", activebackground="#A18276",
                                  bg="#7A918D", fg="#AAC0AA")
         btn_add_film.pack(fill="both", expand="true")
 
-        btn_search_film = tk.Button(main_menu_frame, text="chercher un/des film.s", command=self.seach_film_frame,
+        btn_search_film = tk.Button(main_menu_frame, text="catégories", command=self.seach_film_frame,
                                     bd=0, activeforeground="#DCEED1", activebackground="#A18276",
                                     bg="#7A918D", fg="#AAC0AA")
         btn_search_film.pack(fill="both", expand="true")
 
-        btn_remove_film = tk.Button(main_menu_frame, text="supprimer un film", bd=0,
+        btn_remove_film = tk.Button(main_menu_frame, text="recherche", bd=0,
                                     activeforeground="#DCEED1", activebackground="#A18276", bg="#7A918D", fg="#AAC0AA")
         btn_remove_film.pack(fill="both", expand="true")
 
-        btn_add_category = tk.Button(main_menu_frame, text="ajouter une catégorie", bd=0,
+        btn_add_category = tk.Button(main_menu_frame, text="enregistrer", bd=0,
                                      activeforeground="#DCEED1", activebackground="#A18276", bg="#7A918D", fg="#AAC0AA")
         btn_add_category.pack(fill="both", expand="true")
-
-        btn_manage_category = tk.Button(main_menu_frame, text="gérer les catégories", bd=0, #
-                                        activeforeground="#DCEED1", activebackground="#A18276", bg="#7A918D",
-                                        fg="#AAC0AA")
-        btn_manage_category.pack(fill="both", expand="true")
-
-        btn_create_list = tk.Button(main_menu_frame, text="créer une liste", bd=0,
-                                    activeforeground="#DCEED1", activebackground="#A18276", bg="#7A918D", fg="#AAC0AA")
-        btn_create_list.pack(fill="both", expand="true")
 
         btn_exit = tk.Button(main_menu_frame, text="quitter", command=self.exit_ap, bd=0, pady=20,
                              activeforeground="#DCEED1", activebackground="#A18276", bg="#7A918D", fg="#AAC0AA")
@@ -117,7 +108,7 @@ class AddFilmGUI:
 
         # frame pour la saisie de trois noms d'acteurs
         self.actors_film_frame = tk.Frame(main_film_frame, background='#7A918D')
-        self.actors_film_frame.place(relx=0, rely=0.26, relheight=0.24, relwidth=1)
+        self.actors_film_frame.place(relx=0, rely=0.28, relheight=0.22, relwidth=1)
         self.actors_label = tk.Label(self.actors_film_frame, bg="#7A918D", fg="#AAC0AA", text="Acteurs")
         self.actors_label.place(relx=0, rely=0, relheight=1, relwidth=0.3)
         self.actor1_entry = tk.Entry(self.actors_film_frame, bg="#7A918D", fg="#AAC0AA")
@@ -128,21 +119,23 @@ class AddFilmGUI:
         self.actor3_entry.place(relx=0.3, rely=0.666, relheight=0.333, relwidth=0.7)
 
         # frame pour la catégorie
-        self.category_film_frame = tk.Frame(main_film_frame, background='#7A918D')
-        self.category_film_frame.place(relx=0, rely=0.52, relheight=0.08, relwidth=1)
+        self.category_film_frame = tk.Frame(main_film_frame, background='#AAC0AA')
+        self.category_film_frame.place(relx=0, rely=0.52, relheight=0.16, relwidth=1)
         self.category_label = tk.Label(self.category_film_frame, bg="#7A918D", fg="#AAC0AA", text="Categorie : ")
-        self.category_label.place(relx=0, rely=0, relheight=0.5, relwidth=0.3)
+        self.category_label.place(relx=0, rely=0, relheight=0.4, relwidth=0.3)
         self.category_combobox = ttk.Combobox(self.category_film_frame, values=list(self.workbook.category_dict.keys()),
                                               state='readonly')
         self.category_combobox.current(0)
-        self.category_combobox.place(relx=0.3, rely=0, relheight=0.5, relwidth=0.7)
+        self.category_combobox.place(relx=0.3, rely=0, relheight=0.4, relwidth=0.7)
+        self.category_combobox.place(relx=0.3, rely=0, relheight=0.4, relwidth=0.7)
         self.note_label = tk.Label(self.category_film_frame, bg="#7A918D", fg="#AAC0AA", text="Note : ")
-        self.note_label.place(relx=0.3, rely=0.5, relheight=0.5, relwidth=0.7)
+        self.note_label.place(relx=0, rely=0.5, relheight=0.4, relwidth=0.3)
         self.rating_combobox = ttk.Combobox(self.category_film_frame, values=list(range(0, 11)), state='readonly')
-        self.rating_combobox.place(relx=0.3, rely=0.5, relheight=0.5, relwidth=0.7)
+        self.rating_combobox.place(relx=0.3, rely=0.5, relheight=0.4, relwidth=0.7)
+
         # frame pour les commentaires
         self.commentary_film_frame = tk.Frame(main_film_frame, background='#7A918D')
-        self.commentary_film_frame.place(relx=0, rely=0.62, relheight=0.2, relwidth=1)
+        self.commentary_film_frame.place(relx=0, rely=0.68, relheight=0.2, relwidth=1)
         self.commentary_label = tk.Label(self.commentary_film_frame, bg="#7A918D", fg="#AAC0AA", text="commentaires : ")
         self.commentary_label.place(relx=0, rely=0, relheight=0.2, relwidth=1)
         self.commentary_text = tk.Text(self.commentary_film_frame, bg="#7A918D", fg="#AAC0AA")
@@ -243,8 +236,8 @@ class SearchFilmGUI:
                                               state='readonly')
         self.category_combobox.current(0)
         self.category_combobox.place(relx=0.3, rely=0, relheight=0.5, relwidth=0.7)
-        self.note_label = tk.Label(self.category_film_frame, bg="#7A918D", fg="#AAC0AA", text="Note : ") # TODO Label not working
-        self.note_label.place(relx=0, rely=0.5, relheight=0.5, relwidth=0.7)
+        self.note_label = tk.Label(self.category_film_frame, bg="#7A918D", fg="#AAC0AA", text="Note : ")
+        self.note_label.place(relx=0, rely=0.5, relheight=0.5, relwidth=0.3)
         self.rating_combobox = ttk.Combobox(self.category_film_frame, values=list(range(0, 11)), state='readonly')
         self.rating_combobox.place(relx=0.3, rely=0.5, relheight=0.5, relwidth=0.7)
 
@@ -304,10 +297,10 @@ class DisplayListResultGUI:
         result_table = ttk.Treeview(main_result_frame, columns=cols, show='headings')
         for col in cols:
             result_table.heading(col, text=col)
-        result_table.grid(row=1, column=7, columnspan=2)
+        result_table.grid(row=1, column=0, columnspan=2)
         for k, v in results.items():
-            result_table.insert("", "end", values=(k, v.get('year'), v.get('category'),
-                                                   v.get('director'), v.get('director'),
+            result_table.insert("", "end", values=(k, v.get('year'),v.get('category'),
+                                                   v.get('director'),v.get('director'),
                                                    v.get('actors'), v.get('comment')))
         self.set_active()
 
