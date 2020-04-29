@@ -38,7 +38,7 @@ class WorkbookGUI:
                                      activeforeground="#DCEED1", activebackground="#A18276", bg="#7A918D", fg="#AAC0AA")
         btn_add_category.pack(fill="both", expand="true")
 
-        btn_manage_category = tk.Button(main_menu_frame, text="gérer les catégories", bd=0,
+        btn_manage_category = tk.Button(main_menu_frame, text="gérer les catégories", bd=0, #
                                         activeforeground="#DCEED1", activebackground="#A18276", bg="#7A918D",
                                         fg="#AAC0AA")
         btn_manage_category.pack(fill="both", expand="true")
@@ -284,7 +284,7 @@ class SearchFilmGUI:
         self.film_frame.grab_release()
 
     class SearchResultGUI:
-        def __init__(self, results): # TODO implement listbox treeview or grid
+        def __init__(self, results):  # TODO implement listbox treeview or grid
             self.result_frame = tk.Tk()
             self.result_frame.title("Recherche de film")
             self.result_frame.overrideredirect(1)
