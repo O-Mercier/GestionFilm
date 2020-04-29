@@ -4,7 +4,7 @@ import Workbook as Wb
 
 
 class WorkbookGUI:
-    #test2
+    #test3
     def __init__(self, workbook):
         self.workbook = workbook
         self.window = tk.Tk()
