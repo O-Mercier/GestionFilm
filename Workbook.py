@@ -62,7 +62,12 @@ class Workbook:
         """
         search_dict = dict()
         for key in self.category_dict.keys():
-            search_dict.update(self.category_dict[key].find_films(**kwargs))
+            if 'category' in kwargs:
+                if kwargs.get('category') == key:
+                    search_dict.update(self.category_dict[key].film_dict)
+                    continue
+            else:
+                search_dict.update(self.category_dict[key].find_films(**kwargs))
         return search_dict
 
     def open_workbook(self):
@@ -76,19 +81,11 @@ class Workbook:
                     else:
                         if not self.category_dict.get(row[2]):
                             self.add_category(row[2])
-                        self.category_dict.get(row[2]).add_film(row[0],row[1], director=row[3], actors=row[4],rating=row[5],comment=row[6])
+                        self.category_dict.get(row[2]).add_film(row[0], row[1], director=row[3], actors=row[4],
+                                                                rating=row[5], comment=row[6])
                     line_count += 1
         except FileNotFoundError:
             raise
-
-    def save_search(self, path, film_dict):
-        to_write = list()
-        for kf, vf in film_dict.items():
-            to_write.append([kf, vf['year'],
-                             vf['category'], vf['director'],
-                             vf['actors'], vf['rating'],
-                             vf['comment']])
-        self.write_list(path, to_write)
 
     def save_workbook(self):
         to_write = list()
@@ -101,7 +98,18 @@ class Workbook:
                      vf['comment']])
         self.write_list('workbook_file.csv', to_write)
 
-    def write_list(self, path, to_write):
+    @staticmethod
+    def save_search(path, film_dict):  # TODO fix duplicate saves
+        to_write = list()
+        for kf, vf in film_dict.items():
+            to_write.append([kf, vf.get('year'),
+                             vf.get('category'), vf.get('director'),
+                             vf.get('actors'), vf.get('rating'),
+                             vf.get('comment')])
+        Workbook.write_list(path, to_write)
+
+    @staticmethod
+    def write_list(path, to_write):
         col_name = ['name', 'year', 'category', 'director', 'actors', 'rating', 'comment']
         with open(path, mode='w', newline='') as workbook_file:
             workbook_writer = csv.writer(workbook_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -119,7 +127,7 @@ class Category:
             'year': year,
             'category': str(self.name),
             'director': kwargs.get('director'),
-            'actors': kwargs.get('actors'),  # TODO implement validation max 3
+            'actors': kwargs.get('actors'),
             'rating': kwargs.get('rating'),
             'comment': kwargs.get('comment')}
         }
@@ -130,13 +138,16 @@ class Category:
 
     def find_films(self, **kwargs):
         search_dict = dict()
-        for key in self.film_dict.keys():
-            for kw in kwargs.keys():
-                if kw == 'actors':
-                    pass  # TODO
-                else:
-                    if kwargs[kw] == self.film_dict[key][kw]:
-                        search_dict[key] = self.film_dict[key]
+        for key, value in self.film_dict.items():
+            for k, v in kwargs.items():
+                if k == 'name':
+                    if v == key:
+                        search_dict[key] = value
+                elif k == 'actors':
+                    if set(kwargs.get('actors')).intersection(v):
+                        search_dict[key] = value
+                elif v == value.get(k):
+                    search_dict[key] = value
         return search_dict
 
     def remove_films(self, name):
@@ -146,4 +157,3 @@ class Category:
 if __name__ == "__main__":
     debug_workbook = Workbook()
     input()
-
