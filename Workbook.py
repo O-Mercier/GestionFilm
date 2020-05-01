@@ -20,7 +20,7 @@ class Workbook:
 
     def add_film(self, category, name, year, **kwargs):
         """
-        kwargs:
+        :param kwargs:
             director= str
             actors=  list[str]
             rating= int < 10
@@ -30,7 +30,7 @@ class Workbook:
 
     def edit_film(self, current_category, name, **kwargs):
         """
-        kwargs:
+       :param kwargs:
             category= str
             director= str
             actors=  list[str]
@@ -49,7 +49,7 @@ class Workbook:
 
     def find_films(self, **kwargs):
         """
-        kwargs:
+        :param kwargs:
             name= str
             category= str
             director= str

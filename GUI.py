@@ -31,6 +31,9 @@ class MenuGUI:
         btn_exit = tk.Button(main_menu_frame, text="quitter", command=self.exit_ap, bd=0, pady=20,
                              activeforeground="#DCEED1", activebackground="#A18276", bg="#7A918D", fg="#AAC0AA")
         btn_exit.pack(fill="both", expand="true")
+        btn_DEBUG = tk.Button(main_menu_frame, text="DEBUG", command=self.debug_ph, bd=0, pady=20,  # TODO REMOVE
+                              activeforeground="#DCEED1", activebackground="#A18276", bg="#7A918D", fg="#AAC0AA")
+        btn_DEBUG.pack(fill="both", expand="true")
         self.window.mainloop()
 
     def exit_ap(self):  # TODO implement saving
@@ -38,6 +41,33 @@ class MenuGUI:
 
     def open_workbook(self):
         WorkbookGUI(self.workbook)
+
+    def debug_ph(self):
+        AlertPopUP('test', 'test message',
+                   btn1=dict(text='test', command=print('test')),
+                   btn2=dict(text='test', command=print('test')))
+
+
+class AlertPopUP:
+    def __init__(self, title, text, **kwargs):
+        """
+        :param kwargs:  btn1=dict(text=String, command=function)
+                        btn2=dict(text=String, command=function)
+        """
+        self.popup = tk.Tk()
+        self.popup.wm_title(title)
+        self.label = ttk.Label(self.popup, text=text)
+        self.label.pack(side="top", fill="x", pady=10)
+        if 'btn1' in kwargs:
+            self.B1 = ttk.Button(self.popup, text=kwargs['btn1']['text'], command=kwargs['btn1']['command'])
+        else:
+            self.B1 = ttk.Button(self.popup, text='OK', command=self.popup.destroy)
+        self.B1.pack()
+        if 'btn2' in kwargs:
+            self.B2 = ttk.Button(self.popup, text=kwargs['btn2']['text'], command=kwargs['btn2']['command'])
+            self.B2.pack()
+        print('\a')
+        self.popup.mainloop()
 
 
 class WorkbookGUI:
@@ -217,7 +247,7 @@ class WorkbookGUI:
 class InputFilmGUI:
     def __init__(self, workbook, workbookGUI, **kwargs):
         """
-        kwargs:
+        :param kwargs:
             add=True
             edit=True TODO implement for readability
         """
