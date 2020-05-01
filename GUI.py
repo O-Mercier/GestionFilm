@@ -32,25 +32,25 @@ class MenuGUI:
         main_menu_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
         main_menu_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
         
-        btn_DEBUG = tk.Button(main_menu_frame, text="DEBUG", command=self.debug_ph,
-                             bd=0, activeforeground="#242423", activebackground="#F5CB5C",
-                             bg="#242423", fg="#E8EDDF", font=HELV_30_BUTTON_FONT)
-        btn_film.place(relx=0, rely=0, relwidth=1, relheight=0.175)
+        self.btn_DEBUG = tk.Button(main_menu_frame, text="DEBUG", command=self.debug_ph,
+                                   bd=0, activeforeground="#242423", activebackground="#F5CB5C",
+                                   bg="#242423", fg="#E8EDDF", font=HELV_30_BUTTON_FONT)
+        self.btn_DEBUG.place(relx=0, rely=0, relwidth=1, relheight=0.175)
 
-        btn_category = tk.Button(main_menu_frame, text="catégories", command=self.manage_category_frame,
-                                 bd=0, activeforeground="#242423", activebackground="#F5CB5C",
-                                 bg="#242423", fg="#E8EDDF", font=HELV_30_BUTTON_FONT)
-        btn_category.place(relx=0, rely=0.275, relwidth=1, relheight=0.175)
+        self.btn_category = tk.Button(main_menu_frame, text="catégories", command=self.manage_category_frame,
+                                      bd=0, activeforeground="#242423", activebackground="#F5CB5C",
+                                      bg="#242423", fg="#E8EDDF", font=HELV_30_BUTTON_FONT)
+        self.btn_category.place(relx=0, rely=0.275, relwidth=1, relheight=0.175)
 
-        btn_research = tk.Button(main_menu_frame, text="recherche et gestion", command=self.self.open_workbook,
-                                 bd=0, activeforeground="#242423", activebackground="#F5CB5C", bg="#242423",
-                                 fg="#E8EDDF", font=HELV_30_BUTTON_FONT)
-        btn_research.place(relx=0, rely=0.550, relwidth=1, relheight=0.175)
+        self.btn_research = tk.Button(main_menu_frame, text="recherche et gestion", command=self.open_workbook,
+                                      bd=0, activeforeground="#242423", activebackground="#F5CB5C", bg="#242423",
+                                      fg="#E8EDDF", font=HELV_30_BUTTON_FONT)
+        self.btn_research.place(relx=0, rely=0.550, relwidth=1, relheight=0.175)
 
-        btn_exit = tk.Button(main_menu_frame, text="quitter", command=self.exit_ap, bd=0, pady=20,
-                             activeforeground="#242423", activebackground="#F5CB5C",
-                             bg="#242423", fg="#E8EDDF", font=HELV_30_BUTTON_FONT)
-        btn_exit.place(relx=0, rely=0.825, relwidth=1, relheight=0.175)
+        self.btn_exit = tk.Button(main_menu_frame, text="quitter", command=self.exit_ap, bd=0, pady=20,
+                                  activeforeground="#242423", activebackground="#F5CB5C",
+                                  bg="#242423", fg="#E8EDDF", font=HELV_30_BUTTON_FONT)
+        self.btn_exit.place(relx=0, rely=0.825, relwidth=1, relheight=0.175)
 
         self.window.mainloop()
 
@@ -61,7 +61,7 @@ class MenuGUI:
         WorkbookGUI(self.workbook)
         
     def manage_category_frame(self):
-        ManageCategory(self.workbook)
+        GestionCategGUI(self.workbook)
     
     def debug_ph(self):
         AlertPopUP('test', 'test message',
