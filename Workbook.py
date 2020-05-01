@@ -7,10 +7,10 @@ class Workbook:
         try:
             self.open_workbook()
         except FileNotFoundError:
-            self.category_dict = {'Action': Category('action'),
-                                  'Drame': Category('drame'),
-                                  'Comedie': Category('comedie'),
-                                  'Documentaire': Category('documentaire')}
+            self.category_dict = {'Action': Category('Action'),
+                                  'Drame': Category('Drame'),
+                                  'Comedie': Category('Comedie'),
+                                  'Documentaire': Category('Documentaire')}
 
     def add_category(self, name):
         self.category_dict.update({name: Category(name)})
@@ -44,11 +44,8 @@ class Workbook:
             current_category = kwargs.get('category')
         self.category_dict.get(current_category).edit_film(name, **kwargs)
 
-    def remove_film(self, name):
-        for categ in self.category_dict.keys():
-            for key in self.category_dict[categ].film_dict.keys():
-                if key == name:
-                    del self.category_dict[categ].film_dict[key]
+    def remove_film(self, name, category):
+        self.category_dict.get(category).film_dict.pop(name)
 
     def find_films(self, **kwargs):
         """
@@ -59,9 +56,13 @@ class Workbook:
             actors=  list[str]
             rating= int < 10
             comment= str
+            all=True
         """
         search_dict = dict()
         for key in self.category_dict.keys():
+            if kwargs.get('all'):
+                for k in self.category_dict.keys():
+                    search_dict.update(self.category_dict[k].film_dict)
             if 'category' in kwargs:
                 if kwargs.get('category') == key:
                     search_dict.update(self.category_dict[key].film_dict)
