@@ -135,7 +135,7 @@ class Category:
         )
 
     def edit_film(self, name, **kwargs):
-        self.film_dict[name].update(kwargs)
+        self.film_dict[name].update(kwargs)  # TODO unfuck update
 
     def find_films(self, **kwargs):
         search_dict = dict()

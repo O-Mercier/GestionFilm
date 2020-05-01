@@ -40,7 +40,7 @@ class MenuGUI:
         WorkbookGUI(self.workbook)
 
 
-class WorkbookGUI:  # TODO Pop-up if no result
+class WorkbookGUI:
     def __init__(self, workbook):
         self.workbook = workbook
         self.parameter_dict = dict()
@@ -70,7 +70,6 @@ class WorkbookGUI:  # TODO Pop-up if no result
         self.result_tree.heading('rating', text="Note", anchor=tk.W)
         self.result_tree.heading('comment', text="Commentaire", anchor=tk.W)
         self.result_tree.pack(side=tk.LEFT)
-
         search_frame = tk.Frame(self.workbook_frame, background='#AAC0AA')
         search_frame.pack(side=tk.RIGHT)
         # frame pour la saisie du titre
@@ -117,7 +116,6 @@ class WorkbookGUI:  # TODO Pop-up if no result
         self.rating_label.pack(side=tk.LEFT)
         self.rating_combobox = ttk.Combobox(self.category_film_frame, values=list(range(0, 11)), state='readonly')
         self.rating_combobox.pack(side=tk.RIGHT)
-
         self.button_frame = tk.Frame(self.workbook_frame, background='#AAC0AA')
         self.button_frame.pack(side=tk.BOTTOM)
         self.save_button = tk.Button(self.button_frame, bg="#7A918D",
@@ -145,8 +143,8 @@ class WorkbookGUI:  # TODO Pop-up if no result
                                        command=self.update_tree)
         self.search_button.pack(side=tk.LEFT)
         self.clear_button = tk.Button(self.button_frame, bg="#7A918D",
-                                      fg="#AAC0AA", text="phSHOWALL/CLEAR",
-                                      command=self.show_all_films)
+                                      fg="#AAC0AA", text="CLEAR",
+                                      command=self.clear_inputs)
         self.clear_button.pack(side=tk.LEFT)
         self.set_active()
 
@@ -155,7 +153,7 @@ class WorkbookGUI:  # TODO Pop-up if no result
             self.result_tree.delete(element)
         self.update_parameter()
         if self.parameter_dict:
-            self.result_dict = self.workbook.find_films(**self.parameter_dict)
+            self.result_dict = self.workbook.find_films(**self.parameter_dict)  # TODO Pop-up if no result
         else:
             self.result_dict = self.workbook.find_films(all=True)
         for k, v in self.result_dict.items():
@@ -164,7 +162,7 @@ class WorkbookGUI:  # TODO Pop-up if no result
                                                                list(filter(lambda actor: actor, v.get('actors'))),
                                                                v.get('rating'), v.get('comment')])
 
-    def set_active(self):
+    def set_active(self):  # TODO bind update to enter?
         self.workbook_frame.lift()
         self.workbook_frame.focus_force()
         self.workbook_frame.grab_set()
@@ -174,14 +172,17 @@ class WorkbookGUI:  # TODO Pop-up if no result
         self.workbook_frame.destroy()
 
     def edit_film(self):  # TODO implement confirmation pop-up
-        EditFilmGUI(self.workbook, self)
+        InputFilmGUI(self.workbook, self)
 
     def delete_film(self):  # TODO implement confirmation pop-up
-        selected = self.result_tree.focus()
-        name = self.result_tree.item(selected).get('text')
-        category = self.result_tree.item(selected).get('values')[1]
-        self.workbook.remove_film(name, category)
-        self.result_tree.delete(selected)
+        try:
+            selected = self.result_tree.focus()
+            name = self.result_tree.item(selected).get('text')
+            category = self.result_tree.item(selected).get('values')[1]
+            self.workbook.remove_film(name, category)
+            self.result_tree.delete(selected)
+        except IndexError:  # TODO implement please select pop up
+            pass
 
     def save_search(self):  # TODO implement confirmation pop-up
         path = filedialog.asksaveasfile(initialdir="/", filetypes=[("Fichier CSV", "*.csv")])
@@ -190,7 +191,10 @@ class WorkbookGUI:  # TODO Pop-up if no result
             self.exit_window()
 
     def add_film(self):
-        EditFilmGUI(self.workbook, self, add=True)
+        InputFilmGUI(self.workbook, self, add=True)
+
+    def clear_inputs(self):  # TODO implement method
+        pass
 
     def update_parameter(self):
         if self.tittle_entry.get():
@@ -209,16 +213,14 @@ class WorkbookGUI:  # TODO Pop-up if no result
         if self.rating_combobox.get():
             self.parameter_dict.update(rating=self.rating_combobox.get())
 
-    def show_all_films(self):
-        pass
 
-
-class EditFilmGUI:
+class InputFilmGUI:
     def __init__(self, workbook, workbookGUI, **kwargs):
         """
-               kwargs:
-                   add=True
-               """
+        kwargs:
+            add=True
+            edit=True TODO implement for readability
+        """
         self.workbook = workbook
         self.workbookGUI = workbookGUI
         self.film_frame = tk.Tk()
@@ -342,7 +344,6 @@ class EditFilmGUI:
 
 
 class GestionCategGUI:
-    # TODO implement add film, edit film, delete film
     def __init__(self):
         pass
 
