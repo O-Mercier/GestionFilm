@@ -3,6 +3,16 @@ import tkinter.ttk as ttk
 from tkinter import filedialog
 from Workbook import Workbook
 
+# colors scheme 2:
+# gainsboro (white/light blue) = CFDBD5
+# ivory = E8EDDF
+# maize (yellow) = F5CB5C
+# raisin black = 242423
+# jet (grey) = 333533
+
+HELV_30_BUTTON_FONT = "Helvetica, 30"
+HELV_20_BUTTON_FONT = "Helvetica, 20"
+FUTURA_20_FONT = "Futura, 20"
 
 class MenuGUI:
     def __init__(self, workbook):
@@ -10,30 +20,38 @@ class MenuGUI:
         self.window = tk.Tk()
         self.window.title("Gestionnaire de films")
         self.window.overrideredirect(1)
-        w = 500  # width for the Tk root
-        h = 600  # height for the Tk root
         ws = self.window.winfo_screenwidth()  # width of the screen
         hs = self.window.winfo_screenheight()  # height of the screen
+        h = ws / 2
+        w = ws / 2
         x = (ws / 2) - (w / 2)
         y = (hs / 2) - (h / 2)
         self.window.geometry('%dx%d+%d+%d' % (w, h, x, y))
-        self.window.configure(background='#AAC0AA')
-        main_menu_frame = tk.Frame(self.window)
+        self.window.configure(background='#242423')
+        main_menu_frame = tk.Frame(self.window, bg='#242423')
         main_menu_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
-        btn_add_film = tk.Button(main_menu_frame, text="Gestionaire", command=self.open_workbook,
-                                 bd=0, activeforeground="#DCEED1", activebackground="#A18276",
-                                 bg="#7A918D", fg="#AAC0AA")
-        btn_add_film.pack(fill="both", expand="true")
-        btn_search_film = tk.Button(main_menu_frame, text="Catégories",
-                                    bd=0, activeforeground="#DCEED1", activebackground="#A18276",
-                                    bg="#7A918D", fg="#AAC0AA")
-        btn_search_film.pack(fill="both", expand="true")
+        main_menu_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
+        
+        btn_DEBUG = tk.Button(main_menu_frame, text="DEBUG", command=self.debug_ph,
+                             bd=0, activeforeground="#242423", activebackground="#F5CB5C",
+                             bg="#242423", fg="#E8EDDF", font=HELV_30_BUTTON_FONT)
+        btn_film.place(relx=0, rely=0, relwidth=1, relheight=0.175)
+
+        btn_category = tk.Button(main_menu_frame, text="catégories", command=self.manage_category_frame,
+                                 bd=0, activeforeground="#242423", activebackground="#F5CB5C",
+                                 bg="#242423", fg="#E8EDDF", font=HELV_30_BUTTON_FONT)
+        btn_category.place(relx=0, rely=0.275, relwidth=1, relheight=0.175)
+
+        btn_research = tk.Button(main_menu_frame, text="recherche et gestion", command=self.self.open_workbook,
+                                 bd=0, activeforeground="#242423", activebackground="#F5CB5C", bg="#242423",
+                                 fg="#E8EDDF", font=HELV_30_BUTTON_FONT)
+        btn_research.place(relx=0, rely=0.550, relwidth=1, relheight=0.175)
+
         btn_exit = tk.Button(main_menu_frame, text="quitter", command=self.exit_ap, bd=0, pady=20,
-                             activeforeground="#DCEED1", activebackground="#A18276", bg="#7A918D", fg="#AAC0AA")
-        btn_exit.pack(fill="both", expand="true")
-        btn_DEBUG = tk.Button(main_menu_frame, text="DEBUG", command=self.debug_ph, bd=0, pady=20,  # TODO REMOVE
-                              activeforeground="#DCEED1", activebackground="#A18276", bg="#7A918D", fg="#AAC0AA")
-        btn_DEBUG.pack(fill="both", expand="true")
+                             activeforeground="#242423", activebackground="#F5CB5C",
+                             bg="#242423", fg="#E8EDDF", font=HELV_30_BUTTON_FONT)
+        btn_exit.place(relx=0, rely=0.825, relwidth=1, relheight=0.175)
+
         self.window.mainloop()
 
     def exit_ap(self):  # TODO implement saving
@@ -41,12 +59,15 @@ class MenuGUI:
 
     def open_workbook(self):
         WorkbookGUI(self.workbook)
-
+        
+    def manage_category_frame(self):
+        ManageCategory(self.workbook)
+    
     def debug_ph(self):
         AlertPopUP('test', 'test message',
                    btn1=dict(text='test', command=print('test')),
                    btn2=dict(text='test', command=print('test')))
-
+    
 
 class AlertPopUP:
     def __init__(self, title, text, **kwargs):
@@ -54,20 +75,41 @@ class AlertPopUP:
         :param kwargs:  btn1=dict(text=String, command=function)
                         btn2=dict(text=String, command=function)
         """
+
         self.popup = tk.Tk()
-        self.popup.wm_title(title)
-        self.label = ttk.Label(self.popup, text=text)
-        self.label.pack(side="top", fill="x", pady=10)
+        self.popup.title(title)
+        self.popup.overrideredirect(1)
+        self.popup.configure(bg='#F5CB5C')
+        ws = self.popup.winfo_screenwidth()  # width of the screen
+        hs = self.popup.winfo_screenheight()  # height of the screen
+        h = ws / 4
+        w = ws / 4
+        x = (ws / 2) - (w / 2)
+        y = (hs / 2) - (h / 2)
+        self.popup.geometry('%dx%d+%d+%d' % (w, h, x, y))
+        self.popup_frame = tk.Frame(self.popup, bg='#F5CB5C')
+        self.popup_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
+        self.label = tk.Label(self.popup_frame, text=text, bg='#F5CB5C', fg='#242423', anchor=tk.CENTER, font=FUTURA_20_FONT)
+        self.label.place(relx=0, rely=0, relwidth=1, relheight=0.27)
         if 'btn1' in kwargs:
-            self.B1 = ttk.Button(self.popup, text=kwargs['btn1']['text'], command=kwargs['btn1']['command'])
+            self.B1 = tk.Button(self.popup_frame, text=kwargs['btn1']['text'], command=kwargs['btn1']['command'],
+                                activeforeground="#F5CB5C", activebackground="#333533",
+                                bg="#242423", fg="#E8EDDF", font=HELV_20_BUTTON_FONT)
+            self.B1.place(relx=0, rely=0.37, relwidth=1, relheight=0.27)
         else:
-            self.B1 = ttk.Button(self.popup, text='OK', command=self.popup.destroy)
-        self.B1.pack()
+            self.B1 = tk.Button(self.popup_frame, text='OK', command=self.popup.destroy,
+                                activeforeground="#F5CB5C", activebackground="#333533",
+                                bg="#242423", fg="#E8EDDF", font=HELV_20_BUTTON_FONT)
+            self.B1.place(relx=0, rely=0.74, relwidth=1, relheight=0.27)
         if 'btn2' in kwargs:
-            self.B2 = ttk.Button(self.popup, text=kwargs['btn2']['text'], command=kwargs['btn2']['command'])
-            self.B2.pack()
+            self.B2 = tk.Button(self.popup_frame, text=kwargs['btn2']['text'], command=kwargs['btn2']['command'],
+                                activeforeground="#F5CB5C", activebackground="#333533",
+                                bg="#242423", fg="#E8EDDF", font=HELV_20_BUTTON_FONT)
+            self.B2.place(relx=0, rely=0.74, relwidth=1, relheight=0.27)
+
         print('\a')
         self.popup.mainloop()
+        self.set_active()
 
 
 class WorkbookGUI:
@@ -374,8 +416,54 @@ class InputFilmGUI:
 
 
 class GestionCategGUI:
-    def __init__(self):
-        pass
+    def __init__(self, workbook):
+        self.workbook = workbook
+        self.manage_window = tk.Tk()
+        self.manage_window.title("gérer les catégories")
+        self.manage_window.overrideredirect(1)
+        ws = self.manage_window.winfo_screenwidth()  # width of the screen
+        hs = self.manage_window.winfo_screenheight()  # height of the screen
+        w = ws / 2  # width for the Tk root
+        h = ws / 2  # height for the Tk root
+        x = (ws / 2) - (w / 2)
+        y = (hs / 2) - (h / 2)
+        self.manage_window.geometry('%dx%d+%d+%d' % (w, h, x, y))
+        self.manage_window.configure(background='#242423')
+        manage_main_frame = tk.Frame(self.manage_window, bg="#242423")
+        manage_main_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
+
+        btn_add_category = tk.Button(manage_main_frame, text="ajouter une catégorie",
+                                     bd=0, activeforeground="#242423", activebackground="#F5CB5C", bg="#242423",
+                                     fg="#E8EDDF", font=HELV_30_BUTTON_FONT)
+        btn_add_category.place(relx=0, rely=0, relwidth=1, relheight=0.27)
+
+        btn_remove_category = tk.Button(manage_main_frame, text="supprimer une catégorie",
+                                        bd=0, activeforeground="#242423", activebackground="#F5CB5C", bg="#242423",
+                                        fg="#E8EDDF", font=HELV_30_BUTTON_FONT)
+        btn_remove_category.place(relx=0, rely=0.37, relwidth=1, relheight=0.27)
+
+        btn_exit = tk.Button(manage_main_frame, text="retour", command=self.exit_window,
+                             bd=0, activeforeground="#242423", activebackground="#F5CB5C", bg="#242423",
+                             fg="#E8EDDF", font=HELV_30_BUTTON_FONT)
+        btn_exit.place(relx=0, rely=0.73, relwidth=1, relheight=0.27)
+
+        self.set_active()
+
+    def exit_window(self):
+        self.manage_window.destroy()
+
+    def set_active(self):
+        self.manage_window.lift()
+        self.manage_window.focus_force()
+        self.manage_window.grab_set()
+        self.manage_window.grab_release()
+
+# colors scheme 2:
+# gainsboro (white/light blue) = CFDBD5
+# ivory = E8EDDF
+# maize (yellow) = F5CB5C
+# raisin black = 242423
+# jet (grey) = 333533
 
 
 if __name__ == "__main__":
