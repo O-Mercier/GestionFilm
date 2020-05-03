@@ -322,7 +322,16 @@ class WorkbookGUI:
         InputFilmGUI(self.workbook, self, add=True)
 
     def clear_inputs(self):  # TODO implement method
-        pass
+        self.parameter_dict = dict()
+        self.tittle_entry.delete(0, 'end')
+        self.year_entry.delete(0, 'end')
+        self.director_entry.delete(0, 'end')
+        self.actor1_entry.delete(0, 'end')
+        self.actor2_entry.delete(0, 'end')
+        self.actor3_entry.delete(0, 'end')
+        self.category_combobox.set('')
+        self.rating_combobox.set('')
+        self.update_tree()
 
     def update_parameter(self):
         if self.tittle_entry.get():
@@ -461,7 +470,7 @@ class InputFilmGUI:
                                director=self.director_entry.get(),
                                actors=[self.actor1_entry.get(), self.actor2_entry.get(), self.actor3_entry.get()],
                                rating=self.rating_combobox.get(),
-                               comment=self.commentary_text.get('1.0', tk.END))
+                               comment=self.comment_text.get('1.0', tk.END))
         self.workbookGUI.update_tree()
         self.exit_window()
 
@@ -472,7 +481,7 @@ class InputFilmGUI:
                                 director=self.director_entry.get(),
                                 actors=[self.actor1_entry.get(), self.actor2_entry.get(), self.actor3_entry.get()],
                                 rating=self.rating_combobox.get(),
-                                comment=self.commentary_text.get('1.0', tk.END))
+                                comment=self.comment_text.get('1.0', tk.END))
         self.workbookGUI.update_tree()
         self.exit_window()
 
