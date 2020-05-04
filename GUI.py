@@ -3,13 +3,6 @@ import tkinter.ttk as ttk
 from tkinter import filedialog
 from Workbook import Workbook
 
-# colors scheme 2:
-# gainsboro (white/light blue) = CFDBD5
-# ivory = E8EDDF
-# maize (yellow) = F5CB5C
-# raisin black = 242423
-# jet (grey) = 333533
-
 GAINSBORO = "#E8EDDF"
 IVORY = "#E8EDDF"
 MAIZE = "#F5CB5C"
@@ -19,6 +12,7 @@ JET = "#333533"
 HELV_30_BUTTON_FONT = "Helvetica, 30"
 HELV_20_BUTTON_FONT = "Helvetica, 20"
 HELV_15_FONT = "Helvetica, 15"
+FUTURA_30_FONT = "Futura, 30"
 FUTURA_20_FONT = "Futura, 20"
 FUTURA_15_FONT = "Futura, 15"
 
@@ -43,22 +37,22 @@ class MenuGUI:
 
         self.btn_DEBUG = tk.Button(main_menu_frame, text="DEBUG", command=self.debug_ph,
                                    bd=2, activeforeground=RAISIN_BLACK, activebackground=MAIZE,
-                                   bg=RAISIN_BLACK, fg=IVORY, font=HELV_30_BUTTON_FONT)
+                                   bg=RAISIN_BLACK, fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
         self.btn_DEBUG.place(relx=0, rely=0, relwidth=1, relheight=0.175)
 
         self.btn_category = tk.Button(main_menu_frame, text="catégories", command=self.manage_category_frame,
                                       bd=2, activeforeground=RAISIN_BLACK, activebackground=MAIZE,
-                                      bg=RAISIN_BLACK, fg=IVORY, font=HELV_30_BUTTON_FONT)
+                                      bg=RAISIN_BLACK, fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
         self.btn_category.place(relx=0, rely=0.275, relwidth=1, relheight=0.175)
 
         self.btn_research = tk.Button(main_menu_frame, text="recherche et gestion", command=self.open_workbook,
                                       bd=2, activeforeground=RAISIN_BLACK, activebackground=MAIZE,
-                                      bg=RAISIN_BLACK, fg=IVORY, font=HELV_30_BUTTON_FONT)
+                                      bg=RAISIN_BLACK, fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
         self.btn_research.place(relx=0, rely=0.550, relwidth=1, relheight=0.175)
 
         self.btn_exit = tk.Button(main_menu_frame, text="quitter", command=self.exit_ap,
                                   bd=2, activeforeground=RAISIN_BLACK, activebackground=MAIZE,
-                                  bg=RAISIN_BLACK, fg=IVORY, font=HELV_30_BUTTON_FONT)
+                                  bg=RAISIN_BLACK, fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
         self.btn_exit.place(relx=0, rely=0.825, relwidth=1, relheight=0.175)
 
         self.window.mainloop()
@@ -499,24 +493,43 @@ class GestionCategGUI:
         x = (ws / 2) - (w / 2)
         y = (hs / 2) - (h / 2)
         self.manage_window.geometry('%dx%d+%d+%d' % (w, h, x, y))
-        self.manage_window.configure(background='#242423')
-        manage_main_frame = tk.Frame(self.manage_window, bg="#242423")
-        manage_main_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
+        self.manage_window.configure(background=RAISIN_BLACK)
+        manage_main_frame = tk.Frame(self.manage_window, bg=RAISIN_BLACK)
+        manage_main_frame.place(relx=0.2, rely=0.2, relwidth=0.6, relheight=0.6)
+        style = ttk.Style(manage_main_frame)
+        style.map('TCombobox', fieldbackground=[('readonly', RAISIN_BLACK)])
+        style.map('TCombobox', fieldforeground=[('readonly', GAINSBORO)])
+        style.map('TCombobox', background=[('readonly', GAINSBORO)])
+        style.map('TCombobox', foreground=[('readonly', GAINSBORO)])
+        style.map('TCombobox', selectbackground=[('readonly', RAISIN_BLACK)])
+        style.map('TCombobox', selectforeground=[('readonly', GAINSBORO)])
+        self.category_label = tk.Label(manage_main_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_30_FONT,
+                                       text="catégorie.s", anchor="w")
+        self.category_label.place(relx=0, rely=0, relwidth=1, relheight=0.1)
+        self.category_combobox = ttk.Combobox(manage_main_frame, values=list(self.workbook.category_dict.keys()),
+                                              font=FUTURA_30_FONT, justify='center')
+        self.category_combobox['state'] = 'readonly'
+        self.category_combobox.place(relx=0, rely=0.125, relwidth=1, relheight=0.15)
 
         btn_add_category = tk.Button(manage_main_frame, text="ajouter une catégorie",
-                                     bd=0, activeforeground="#242423", activebackground="#F5CB5C", bg="#242423",
-                                     fg="#E8EDDF", font=HELV_30_BUTTON_FONT)
-        btn_add_category.place(relx=0, rely=0, relwidth=1, relheight=0.27)
+                                     bd=2, activeforeground=RAISIN_BLACK, activebackground=GAINSBORO, bg=RAISIN_BLACK,
+                                     fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
+        btn_add_category.place(relx=0, rely=0.4, relwidth=1, relheight=0.167)
+
+        btn_modify_category = tk.Button(manage_main_frame, text="modifier une catégorie",
+                                        bd=2, activeforeground=RAISIN_BLACK, activebackground=GAINSBORO, bg=RAISIN_BLACK,
+                                        fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
+        btn_modify_category.place(relx=0, rely=0.617, relwidth=1, relheight=0.167)
 
         btn_remove_category = tk.Button(manage_main_frame, text="supprimer une catégorie",
-                                        bd=0, activeforeground="#242423", activebackground="#F5CB5C", bg="#242423",
-                                        fg="#E8EDDF", font=HELV_30_BUTTON_FONT)
-        btn_remove_category.place(relx=0, rely=0.37, relwidth=1, relheight=0.27)
+                                        bd=2, activeforeground=RAISIN_BLACK, activebackground=GAINSBORO, bg=RAISIN_BLACK,
+                                        fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
+        btn_remove_category.place(relx=0, rely=0.833, relwidth=1, relheight=0.167)
 
-        btn_exit = tk.Button(manage_main_frame, text="retour", command=self.exit_window,
-                             bd=0, activeforeground="#242423", activebackground="#F5CB5C", bg="#242423",
-                             fg="#E8EDDF", font=HELV_30_BUTTON_FONT)
-        btn_exit.place(relx=0, rely=0.73, relwidth=1, relheight=0.27)
+        btn_exit = tk.Button(self.manage_window, text="retour", command=self.exit_window,
+                             bd=0, activeforeground=RAISIN_BLACK, activebackground=MAIZE, bg=RAISIN_BLACK,
+                             fg=MAIZE, font=HELV_20_BUTTON_FONT)
+        btn_exit.place(relx=0.55, rely=0.85, relwidth=0.25, relheight=0.075)
 
         self.set_active()
 
@@ -528,15 +541,6 @@ class GestionCategGUI:
         self.manage_window.focus_force()
         self.manage_window.grab_set()
         self.manage_window.grab_release()
-
-
-# colors scheme 2:
-# gainsboro (white/light blue) = CFDBD5
-# ivory = E8EDDF
-# maize (yellow) = F5CB5C
-# raisin black = 242423
-# jet (grey) = 333533
-
 
 if __name__ == "__main__":
     debug_workbook_gui = MenuGUI(Workbook())
