@@ -176,9 +176,9 @@ class WorkbookGUI:
         self.result_tree.heading('actors', text="Acteurs", anchor=tk.W)
         self.result_tree.heading('rating', text="Note", anchor=tk.W)
 
-        search_frame = tk.Frame(self.main_frame, background=RAISIN_BLACK)
-        search_frame.place(relx=0, rely=0, relwidth=0.35, relheight=0.8)
-        self.title_film_frame = tk.Frame(search_frame, background=RAISIN_BLACK)
+        self.search_frame = tk.Frame(self.main_frame, background=RAISIN_BLACK)
+        self.search_frame.place(relx=0, rely=0, relwidth=0.35, relheight=0.8)
+        self.title_film_frame = tk.Frame(self.search_frame, background=RAISIN_BLACK)
         self.title_film_frame.place(relx=0, rely=0, relwidth=1, relheight=0.05)
         self.tittle_label = tk.Label(self.title_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT,
                                      text="titre", anchor="w")
@@ -186,7 +186,7 @@ class WorkbookGUI:
         self.tittle_entry = tk.Entry(self.title_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT, justify='center')
         self.tittle_entry.place(relx=0.3, rely=0, relwidth=0.7, relheight=1)
         # frame pour la saisie de la date de création
-        self.year_film_frame = tk.Frame(search_frame, background=RAISIN_BLACK)
+        self.year_film_frame = tk.Frame(self.search_frame, background=RAISIN_BLACK)
         self.year_film_frame.place(relx=0, rely=0.1, relwidth=1, relheight=0.05)
         self.year_label = tk.Label(self.year_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT,
                                    text="année", anchor="w")
@@ -194,7 +194,7 @@ class WorkbookGUI:
         self.year_entry = tk.Entry(self.year_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT, justify='center')
         self.year_entry.place(relx=0.3, rely=0, relwidth=0.7, relheight=1)
         # frame pour le réalisateur
-        self.director_film_frame = tk.Frame(search_frame, background=RAISIN_BLACK)
+        self.director_film_frame = tk.Frame(self.search_frame, background=RAISIN_BLACK)
         self.director_film_frame.place(relx=0, rely=0.2, relwidth=1, relheight=0.05)
         self.director_label = tk.Label(self.director_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT,
                                        text="réalisateur", anchor="w")
@@ -202,7 +202,7 @@ class WorkbookGUI:
         self.director_entry = tk.Entry(self.director_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT, justify='center')
         self.director_entry.place(relx=0.3, rely=0, relwidth=0.7, relheight=1)
         # frame pour la saisie de trois noms d'acteurs
-        self.actors_film_frame = tk.Frame(search_frame, background=RAISIN_BLACK)
+        self.actors_film_frame = tk.Frame(self.search_frame, background=RAISIN_BLACK)
         self.actors_film_frame.place(relx=0, rely=0.3, relwidth=1, relheight=0.15)
         self.actors_label = tk.Label(self.actors_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT,
                                      text="acteurs", anchor="w")
@@ -214,7 +214,7 @@ class WorkbookGUI:
         self.actor3_entry = tk.Entry(self.actors_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT, justify='center')
         self.actor3_entry.place(relx=0.3, rely=0.66, relwidth=0.7, relheight=0.33)
         # frame pour la catégorie
-        self.category_film_frame = tk.Frame(search_frame, background=RAISIN_BLACK)
+        self.category_film_frame = tk.Frame(self.search_frame, background=RAISIN_BLACK)
         self.category_film_frame.place(relx=0, rely=0.5, relwidth=1, relheight=0.05)
         style.map('TCombobox', fieldbackground=[('readonly', RAISIN_BLACK)])
         style.map('TCombobox', fieldforeground=[('readonly', GAINSBORO)])
@@ -229,7 +229,7 @@ class WorkbookGUI:
                                               font=FUTURA_15_FONT, justify='center')
         self.category_combobox['state'] = 'readonly'
         self.category_combobox.place(relx=0.3, rely=0, relwidth=0.7, relheight=1)
-        self.category_rating_frame = tk.Frame(search_frame, background='#7A918D')
+        self.category_rating_frame = tk.Frame(self.search_frame, background='#7A918D')
         self.category_rating_frame.place(relx=0, rely=0.6, relwidth=1, relheight=0.05)
         self.rating_label = tk.Label(self.category_rating_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT,
                                      text="note", anchor="w")
@@ -237,11 +237,11 @@ class WorkbookGUI:
         self.rating_combobox = ttk.Combobox(self.category_rating_frame, values=list(range(0, 11)), font=FUTURA_15_FONT, justify='center')
         self.rating_combobox['state'] = 'readonly'
         self.rating_combobox.place(relx=0.3, rely=0, relwidth=0.7, relheight=1)
-        self.search_button = tk.Button(search_frame, text="chercher", command=self.update_tree,
+        self.search_button = tk.Button(self.search_frame, text="chercher", command=self.update_tree,
                                        bd=2, activeforeground=RAISIN_BLACK, activebackground=GAINSBORO,
                                        bg=RAISIN_BLACK, fg=GAINSBORO, font=HELV_20_BUTTON_FONT)
         self.search_button.place(relx=0, rely=0.75, relwidth=1, relheight=0.1)
-        self.clear_button = tk.Button(search_frame, text="vider champs", command=self.clear_inputs,
+        self.clear_button = tk.Button(self.search_frame, text="vider champs", command=self.clear_inputs,
                                       bd=2, activeforeground=RAISIN_BLACK, activebackground=GAINSBORO,
                                       bg=RAISIN_BLACK, fg=GAINSBORO, font=HELV_20_BUTTON_FONT)
         self.clear_button.place(relx=0, rely=0.9, relwidth=1, relheight=0.1)
@@ -277,6 +277,7 @@ class WorkbookGUI:
         self.set_active()
 
     def update_tree(self):
+        self.result_dict = dict()
         for element in self.result_tree.get_children():
             self.result_tree.delete(element)
         self.update_parameter()
@@ -299,8 +300,11 @@ class WorkbookGUI:
     def exit_window(self):
         self.workbook_frame.destroy()
 
-    def edit_film(self):  # TODO implement confirmation pop-up
-        InputFilmGUI(self.workbook, self)
+    def save_search(self):  # TODO implement confirmation pop-up
+        path = filedialog.asksaveasfile(initialdir="/", filetypes=[("Fichier CSV", "*.csv")])
+        if path:
+            Workbook.save_search(path.name + '.csv', self.results_dict)
+            self.exit_window()
 
     def delete_film(self):  # TODO implement confirmation pop-up
         try:
@@ -312,17 +316,27 @@ class WorkbookGUI:
         except IndexError:  # TODO implement please select pop up
             pass
 
-    def save_search(self):  # TODO implement confirmation pop-up
-        path = filedialog.asksaveasfile(initialdir="/", filetypes=[("Fichier CSV", "*.csv")])
-        if path:
-            Workbook.save_search(path.name + '.csv', self.results_dict)
-            self.exit_window()
-
     def add_film(self):
         InputFilmGUI(self.workbook, self, add=True)
 
+    def edit_film(self):
+        try:
+            self.result_tree.focus()
+            InputFilmGUI(self.workbook, self, edit=True)
+        except IndexError:  # TODO implement please select pop up
+            pass
+
     def clear_inputs(self):  # TODO implement method
-        pass
+        self.parameter_dict = dict()
+        self.tittle_entry.delete(0, 'end')
+        self.year_entry.delete(0, 'end')
+        self.director_entry.delete(0, 'end')
+        self.actor1_entry.delete(0, 'end')
+        self.actor2_entry.delete(0, 'end')
+        self.actor3_entry.delete(0, 'end')
+        self.category_combobox.set('')
+        self.rating_combobox.set('')
+        self.update_tree()
 
     def update_parameter(self):
         if self.tittle_entry.get():
@@ -342,19 +356,19 @@ class WorkbookGUI:
             self.parameter_dict.update(rating=self.rating_combobox.get())
 
 
-class InputFilmGUI:
+class InputFilmGUI: # TODO implement confirmation pop-up
     def __init__(self, workbook, workbookGUI, **kwargs):
         """
         :param kwargs:
             add=True
-            edit=True TODO implement for readability
+            edit=True
         """
         self.workbook = workbook
         self.workbookGUI = workbookGUI
         self.film_frame = tk.Tk()
         if kwargs.get('add'):
             self.film_frame.title("Ajout d'un film")
-        else:
+        elif kwargs.get('edit'):
             self.film_frame.title("Modification d'un film")
         ws = self.film_frame.winfo_screenwidth()  # width of the screen
         hs = self.film_frame.winfo_screenheight()  # height of the screen
@@ -434,19 +448,39 @@ class InputFilmGUI:
         self.comment_text = tk.Text(self.category_comment_frame, bd=0,
                                     bg=RAISIN_BLACK, fg=MAIZE, font=FUTURA_20_FONT)
         self.comment_text.place(relx=0, rely=0.25, relwidth=1, relheight=0.75)
-
-        if kwargs.get('add'):
+        if kwargs.get('edit'):
+            self.edit_button = tk.Button(main_film_frame, text="modifier",
+                                     bd=2, activeforeground=RAISIN_BLACK, activebackground=MAIZE,
+                                     bg=RAISIN_BLACK, fg=MAIZE, font=HELV_20_BUTTON_FONT,
+                                     command=self.edit_film_ctr)
+            self.edit_button.place(relx=0, rely=0.9, relheight=0.1, relwidth=1)
+            selected = workbookGUI.result_tree.focus()
+            self.name = workbookGUI.result_tree.item(selected).get('text')
+            self.category = workbookGUI.result_tree.item(selected).get('values')[1]
+            self.tittle_entry.insert(0, self.name)
+            self.year_entry.insert(0,  str(workbook.category_dict.get(self.category).film_dict.get(self.name).get('year')))
+            self.director_entry.insert(0, workbook.category_dict.get(self.category).film_dict.get(self.name).get('director'))
+            try:
+                self.actor1_entry.insert(0, workbook.category_dict.get(self.category).film_dict.get(self.name).get('actors')[0])
+            except IndexError:
+                self.actor1_entry.insert(0, '')
+            try:
+                self.actor2_entry.insert(0, workbook.category_dict.get(self.category).film_dict.get(self.name).get('actors')[1])
+            except IndexError:
+                self.actor2_entry.insert(0, '')
+            try:
+                self.actor3_entry.insert(0, workbook.category_dict.get(self.category).film_dict.get(self.name).get('actors')[2])
+            except IndexError:
+                self.actor3_entry.insert(0, '')
+            self.category_combobox.set(self.category)
+            self.rating_combobox.set(workbook.category_dict.get(self.category).film_dict.get(self.name).get('rating'))
+            self.comment_text.insert(tk.INSERT, workbook.category_dict.get(self.category).film_dict.get(self.name).get('comment'))
+        elif kwargs.get('add'):
             self.add_button = tk.Button(main_film_frame, text="ajouter",
                                         bd=2, activeforeground=MAIZE, activebackground=RAISIN_BLACK,
                                         bg=MAIZE, fg=RAISIN_BLACK, font=HELV_20_BUTTON_FONT,
                                         command=self.add_film_ctr)
             self.add_button.place(relx=0, rely=0.9, relheight=0.1, relwidth=0.6)
-        else:
-            self.edit_button = tk.Button(main_film_frame, text="modifier",
-                                         bd=2, activeforeground=RAISIN_BLACK, activebackground=MAIZE,
-                                         bg=RAISIN_BLACK, fg=MAIZE, font=HELV_20_BUTTON_FONT,
-                                         command=self.edit_film_ctr)
-            self.edit_button.place(relx=0, rely=0.9, relheight=0.1, relwidth=1)
         self.cancel_button = tk.Button(main_film_frame, text="annuler",
                                        bd=0, activeforeground=RAISIN_BLACK, activebackground=MAIZE,
                                        bg=RAISIN_BLACK, fg=MAIZE, font=HELV_20_BUTTON_FONT,
@@ -461,18 +495,21 @@ class InputFilmGUI:
                                director=self.director_entry.get(),
                                actors=[self.actor1_entry.get(), self.actor2_entry.get(), self.actor3_entry.get()],
                                rating=self.rating_combobox.get(),
-                               comment=self.commentary_text.get('1.0', tk.END))
+                               comment=self.comment_text.get('1.0', tk.END))
         self.workbookGUI.update_tree()
         self.exit_window()
 
     def edit_film_ctr(self):
-        self.workbook.edit_film(self.category_combobox.get(),  # TODO implement pop up if missing name or year
-                                self.tittle_entry.get(),
-                                year=self.year_entry.get(),
+        kwargs = dict(year=self.year_entry.get(),
                                 director=self.director_entry.get(),
                                 actors=[self.actor1_entry.get(), self.actor2_entry.get(), self.actor3_entry.get()],
                                 rating=self.rating_combobox.get(),
-                                comment=self.commentary_text.get('1.0', tk.END))
+                                comment=self.comment_text.get('1.0', tk.END))
+        if self.name != self.tittle_entry.get():
+            kwargs.update(name=self.tittle_entry.get())
+        if self.category != self.category_combobox.get():
+            kwargs.update(category=self.category_combobox.get())
+        self.workbook.edit_film(self.category, self.name, **kwargs)
         self.workbookGUI.update_tree()
         self.exit_window()
 
