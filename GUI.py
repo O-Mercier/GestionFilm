@@ -1,6 +1,9 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import filedialog
+
+from asn1crypto._ffi import null
+
 from Workbook import Workbook
 
 GAINSBORO = "#E8EDDF"
@@ -22,7 +25,6 @@ class MenuGUI:
         self.workbook = workbook
         self.window = tk.Tk()
         self.window.title("Gestionnaire de films")
-        # self.window.overrideredirect(1)
         ws = self.window.winfo_screenwidth()  # width of the screen
         hs = self.window.winfo_screenheight()  # height of the screen
         h = ws / 2
@@ -32,7 +34,6 @@ class MenuGUI:
         self.window.geometry('%dx%d+%d+%d' % (w, h, x, y))
         self.window.configure(background='#242423')
         main_menu_frame = tk.Frame(self.window, bg='#242423')
-        main_menu_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
         main_menu_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
 
         self.btn_DEBUG = tk.Button(main_menu_frame, text="DEBUG", command=self.debug_ph,
@@ -177,7 +178,8 @@ class WorkbookGUI:
         self.tittle_label = tk.Label(self.title_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT,
                                      text="titre", anchor="w")
         self.tittle_label.place(relx=0, rely=0, relwidth=0.3, relheight=1)
-        self.tittle_entry = tk.Entry(self.title_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT, justify='center')
+        self.tittle_entry = tk.Entry(self.title_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT,
+                                     justify='center')
         self.tittle_entry.place(relx=0.3, rely=0, relwidth=0.7, relheight=1)
         # frame pour la saisie de la date de création
         self.year_film_frame = tk.Frame(search_frame, background=RAISIN_BLACK)
@@ -185,7 +187,8 @@ class WorkbookGUI:
         self.year_label = tk.Label(self.year_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT,
                                    text="année", anchor="w")
         self.year_label.place(relx=0, rely=0, relwidth=0.3, relheight=1)
-        self.year_entry = tk.Entry(self.year_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT, justify='center')
+        self.year_entry = tk.Entry(self.year_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT,
+                                   justify='center')
         self.year_entry.place(relx=0.3, rely=0, relwidth=0.7, relheight=1)
         # frame pour le réalisateur
         self.director_film_frame = tk.Frame(search_frame, background=RAISIN_BLACK)
@@ -193,7 +196,8 @@ class WorkbookGUI:
         self.director_label = tk.Label(self.director_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT,
                                        text="réalisateur", anchor="w")
         self.director_label.place(relx=0, rely=0, relwidth=0.3, relheight=1)
-        self.director_entry = tk.Entry(self.director_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT, justify='center')
+        self.director_entry = tk.Entry(self.director_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT,
+                                       justify='center')
         self.director_entry.place(relx=0.3, rely=0, relwidth=0.7, relheight=1)
         # frame pour la saisie de trois noms d'acteurs
         self.actors_film_frame = tk.Frame(search_frame, background=RAISIN_BLACK)
@@ -201,11 +205,14 @@ class WorkbookGUI:
         self.actors_label = tk.Label(self.actors_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT,
                                      text="acteurs", anchor="w")
         self.actors_label.place(relx=0, rely=0, relwidth=0.3, relheight=1)
-        self.actor1_entry = tk.Entry(self.actors_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT, justify='center')
+        self.actor1_entry = tk.Entry(self.actors_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT,
+                                     justify='center')
         self.actor1_entry.place(relx=0.3, rely=0, relwidth=0.7, relheight=0.33)
-        self.actor2_entry = tk.Entry(self.actors_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT, justify='center')
+        self.actor2_entry = tk.Entry(self.actors_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT,
+                                     justify='center')
         self.actor2_entry.place(relx=0.3, rely=0.33, relwidth=0.7, relheight=0.33)
-        self.actor3_entry = tk.Entry(self.actors_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT, justify='center')
+        self.actor3_entry = tk.Entry(self.actors_film_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT,
+                                     justify='center')
         self.actor3_entry.place(relx=0.3, rely=0.66, relwidth=0.7, relheight=0.33)
         # frame pour la catégorie
         self.category_film_frame = tk.Frame(search_frame, background=RAISIN_BLACK)
@@ -228,7 +235,8 @@ class WorkbookGUI:
         self.rating_label = tk.Label(self.category_rating_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_15_FONT,
                                      text="note", anchor="w")
         self.rating_label.place(relx=0, rely=0, relwidth=0.3, relheight=1)
-        self.rating_combobox = ttk.Combobox(self.category_rating_frame, values=list(range(0, 11)), font=FUTURA_15_FONT, justify='center')
+        self.rating_combobox = ttk.Combobox(self.category_rating_frame, values=list(range(0, 11)), font=FUTURA_15_FONT,
+                                            justify='center')
         self.rating_combobox['state'] = 'readonly'
         self.rating_combobox.place(relx=0.3, rely=0, relwidth=0.7, relheight=1)
         self.search_button = tk.Button(search_frame, text="chercher", command=self.update_tree,
@@ -263,9 +271,9 @@ class WorkbookGUI:
         self.save_button.place(relx=0.80, rely=0, relwidth=0.2, relheight=1)
 
         self.cancel_button = tk.Button(self.workbook_frame, text="retour",
-                                     bd=2, activeforeground=RAISIN_BLACK, activebackground=MAIZE,
-                                     bg=RAISIN_BLACK, fg=MAIZE, font=HELV_20_BUTTON_FONT,
-                                     command=self.exit_window)
+                                       bd=2, activeforeground=RAISIN_BLACK, activebackground=MAIZE,
+                                       bg=RAISIN_BLACK, fg=MAIZE, font=HELV_20_BUTTON_FONT,
+                                       command=self.exit_window)
         self.cancel_button.place(relx=0.74, rely=0.90, relwidth=0.16, relheight=0.05)
 
         self.set_active()
@@ -352,8 +360,8 @@ class InputFilmGUI:
             self.film_frame.title("Modification d'un film")
         ws = self.film_frame.winfo_screenwidth()  # width of the screen
         hs = self.film_frame.winfo_screenheight()  # height of the screen
-        h = ws/2
-        w = ws /2
+        h = ws / 2
+        w = ws / 2
         x = (ws / 2) - (w / 2)
         y = (hs / 2) - (h / 2)
         self.film_frame.geometry('%dx%d+%d+%d' % (w, h, x, y))
@@ -381,7 +389,8 @@ class InputFilmGUI:
         self.director_label = tk.Label(self.director_film_frame, bg=JET, fg=GAINSBORO, font=FUTURA_20_FONT,
                                        text="réalisateur", anchor="w")
         self.director_label.place(relx=0, rely=0, relwidth=0.3, relheight=1)
-        self.director_entry = tk.Entry(self.director_film_frame, bg=GAINSBORO, fg=JET, font=FUTURA_20_FONT, justify='center')
+        self.director_entry = tk.Entry(self.director_film_frame, bg=GAINSBORO, fg=JET, font=FUTURA_20_FONT,
+                                       justify='center')
         self.director_entry.place(relx=0.3, rely=0, relwidth=0.7, relheight=1)
         # frame pour la saisie de trois noms d'acteurs
         self.actors_film_frame = tk.Frame(main_film_frame, background=GAINSBORO)
@@ -389,11 +398,14 @@ class InputFilmGUI:
         self.actors_label = tk.Label(self.actors_film_frame, bg=JET, fg=GAINSBORO, font=FUTURA_20_FONT,
                                      text="acteurs", anchor="w")
         self.actors_label.place(relx=0, rely=0, relwidth=0.3, relheight=1)
-        self.actor1_entry = tk.Entry(self.actors_film_frame, bg=GAINSBORO, fg=JET, font=FUTURA_20_FONT, justify='center')
+        self.actor1_entry = tk.Entry(self.actors_film_frame, bg=GAINSBORO, fg=JET, font=FUTURA_20_FONT,
+                                     justify='center')
         self.actor1_entry.place(relx=0.3, rely=0, relwidth=0.7, relheight=0.33)
-        self.actor2_entry = tk.Entry(self.actors_film_frame, bg=GAINSBORO, fg=JET, font=FUTURA_20_FONT, justify='center')
+        self.actor2_entry = tk.Entry(self.actors_film_frame, bg=GAINSBORO, fg=JET, font=FUTURA_20_FONT,
+                                     justify='center')
         self.actor2_entry.place(relx=0.3, rely=0.33, relwidth=0.7, relheight=0.33)
-        self.actor3_entry = tk.Entry(self.actors_film_frame, bg=GAINSBORO, fg=JET, font=FUTURA_20_FONT, justify='center')
+        self.actor3_entry = tk.Entry(self.actors_film_frame, bg=GAINSBORO, fg=JET, font=FUTURA_20_FONT,
+                                     justify='center')
         self.actor3_entry.place(relx=0.3, rely=0.66, relwidth=0.7, relheight=0.33)
         # frame pour la catégorie
         self.category_film_frame = tk.Frame(main_film_frame, background=IVORY)
@@ -417,13 +429,14 @@ class InputFilmGUI:
         self.rating_label = tk.Label(self.category_rating_frame, bg=JET, fg=GAINSBORO, font=FUTURA_20_FONT,
                                      text="note", anchor="w")
         self.rating_label.place(relx=0, rely=0, relwidth=0.3, relheight=1)
-        self.rating_combobox = ttk.Combobox(self.category_rating_frame, values=list(range(0, 11)), font=FUTURA_20_FONT, justify='center')
+        self.rating_combobox = ttk.Combobox(self.category_rating_frame, values=list(range(0, 11)), font=FUTURA_20_FONT,
+                                            justify='center')
         self.rating_combobox['state'] = 'readonly'
         self.rating_combobox.place(relx=0.3, rely=0, relwidth=0.7, relheight=1)
         self.category_comment_frame = tk.Frame(main_film_frame, background=GAINSBORO)
         self.category_comment_frame.place(relx=0, rely=0.55, relwidth=1, relheight=0.3)
         self.comment_label = tk.Label(self.category_comment_frame, bg=JET, fg=GAINSBORO, font=FUTURA_20_FONT,
-                                     text="commentaire", anchor="w")
+                                      text="commentaire", anchor="w")
         self.comment_label.place(relx=0, rely=0, relwidth=1, relheight=0.25)
         self.comment_text = tk.Text(self.category_comment_frame, bd=0,
                                     bg=GAINSBORO, fg=JET, font=FUTURA_20_FONT)
@@ -511,18 +524,20 @@ class GestionCategGUI:
         self.category_combobox['state'] = 'readonly'
         self.category_combobox.place(relx=0, rely=0.125, relwidth=1, relheight=0.15)
 
-        btn_add_category = tk.Button(manage_main_frame, text="ajouter une catégorie",
+        btn_add_category = tk.Button(manage_main_frame, text="ajouter une catégorie", command=self.add_category,
                                      bd=2, activeforeground=RAISIN_BLACK, activebackground=GAINSBORO, bg=RAISIN_BLACK,
                                      fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
         btn_add_category.place(relx=0, rely=0.4, relwidth=1, relheight=0.167)
 
-        btn_modify_category = tk.Button(manage_main_frame, text="modifier une catégorie",
-                                        bd=2, activeforeground=RAISIN_BLACK, activebackground=GAINSBORO, bg=RAISIN_BLACK,
+        btn_modify_category = tk.Button(manage_main_frame, text="modifier une catégorie", command=self.edit_category,
+                                        bd=2, activeforeground=RAISIN_BLACK, activebackground=GAINSBORO,
+                                        bg=RAISIN_BLACK,
                                         fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
         btn_modify_category.place(relx=0, rely=0.617, relwidth=1, relheight=0.167)
 
         btn_remove_category = tk.Button(manage_main_frame, text="supprimer une catégorie",
-                                        bd=2, activeforeground=RAISIN_BLACK, activebackground=GAINSBORO, bg=RAISIN_BLACK,
+                                        bd=2, activeforeground=RAISIN_BLACK, activebackground=GAINSBORO,
+                                        bg=RAISIN_BLACK,
                                         fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
         btn_remove_category.place(relx=0, rely=0.833, relwidth=1, relheight=0.167)
 
@@ -533,6 +548,16 @@ class GestionCategGUI:
 
         self.set_active()
 
+    def edit_category(self):
+        if self.category_combobox.get() == null:
+            # TODO add popup for no category selected
+            pass
+        else:
+            ModifyAddCategory(self.workbook, category_to_change=self.category_combobox.get())
+
+    def add_category(self):
+        ModifyAddCategory(self.workbook, add=True)
+
     def exit_window(self):
         self.manage_window.destroy()
 
@@ -541,6 +566,67 @@ class GestionCategGUI:
         self.manage_window.focus_force()
         self.manage_window.grab_set()
         self.manage_window.grab_release()
+
+
+class ModifyAddCategory:
+    def __init__(self, workbook, **kwargs):
+        self.workbook = workbook
+        self.window = tk.Tk()
+        ws = self.window.winfo_screenwidth()
+        hs = self.window.winfo_screenheight()
+        h = ws / 2
+        w = ws / 2
+        x = (ws / 2) - (w / 2)
+        y = (hs / 2) - (h / 2)
+        self.window.geometry('%dx%d+%d+%d' % (w, h, x, y))
+        self.window.configure(background=RAISIN_BLACK)
+        edit_add_frame = tk.Frame(self.window, bg=RAISIN_BLACK)
+        edit_add_frame.place(relx=0.15, rely=0.15, relwidth=0.7, relheight=0.7)
+        if kwargs.get('add'):
+            title = "ajouter une catégorie"
+            label_text = "nouvelle catégorie"
+            button_text = "ajouter"
+            label_x = 0
+            label_y = 0
+            label_height = 0.1
+            entry_x = 0
+            entry_y = 0.12
+            button_x = 0
+            button_y = 0.45
+        else:
+            title = "mofifier une catégorie"
+            label_text = "nouveau nom de " + kwargs.get('category_to_change')
+            button_text = "modifier"
+            label_x = 0
+            label_y = 0
+            label_height = 0.1
+            entry_x = 0
+            entry_y = 0.12
+            button_x = 0
+            button_y = 0.45
+
+        self.window.title(title)
+        self.label_title = tk.Label(edit_add_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_30_FONT,
+                                    text=label_text, anchor="w")
+        self.label_title.place(relx=label_x, rely=label_y, relwidth=1, relheight=label_height)
+        self.title_entry = tk.Entry(edit_add_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_30_FONT,
+                                    justify='center')
+        self.title_entry.place(relx=entry_x, rely=entry_y, relwidth=1, relheight=0.2)
+        self.action_button = tk.Button(edit_add_frame, text=button_text,
+                                       bd=2, activeforeground=RAISIN_BLACK, activebackground=GAINSBORO,
+                                       bg=RAISIN_BLACK,
+                                       fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
+        self.action_button.place(relx=button_x, rely=button_y, relwidth=1, relheight=0.25)
+
+        self.action_button = tk.Button(edit_add_frame, text="retour", command=self.exit_window,
+                                       bd=2, activeforeground=RAISIN_BLACK, activebackground=MAIZE,
+                                       bg=RAISIN_BLACK,
+                                       fg=MAIZE, font=HELV_30_BUTTON_FONT)
+        self.action_button.place(relx=0, rely=0.75, relwidth=1, relheight=0.25)
+
+    def exit_window(self):
+        self.window.destroy()
+
 
 if __name__ == "__main__":
     debug_workbook_gui = MenuGUI(Workbook())
