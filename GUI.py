@@ -33,29 +33,24 @@ class MenuGUI:
         x = (ws / 2) - (w / 2)
         y = (hs / 2) - (h / 2)
         self.window.geometry('%dx%d+%d+%d' % (w, h, x, y))
-        self.window.configure(background='#242423')
-        main_menu_frame = tk.Frame(self.window, bg='#242423')
+        self.window.configure(background=RAISIN_BLACK)
+        main_menu_frame = tk.Frame(self.window, bg=RAISIN_BLACK)
         main_menu_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
-
-        self.btn_DEBUG = tk.Button(main_menu_frame, text="DEBUG", command=self.debug_ph,
-                                   bd=2, activeforeground=RAISIN_BLACK, activebackground=MAIZE,
-                                   bg=RAISIN_BLACK, fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
-        self.btn_DEBUG.place(relx=0, rely=0, relwidth=1, relheight=0.175)
 
         self.btn_category = tk.Button(main_menu_frame, text="catégories", command=self.manage_category_frame,
                                       bd=2, activeforeground=RAISIN_BLACK, activebackground=MAIZE,
                                       bg=RAISIN_BLACK, fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
-        self.btn_category.place(relx=0, rely=0.275, relwidth=1, relheight=0.175)
+        self.btn_category.place(relx=0, rely=0, relwidth=1, relheight=0.27)
 
         self.btn_research = tk.Button(main_menu_frame, text="recherche et gestion", command=self.open_workbook,
                                       bd=2, activeforeground=RAISIN_BLACK, activebackground=MAIZE,
                                       bg=RAISIN_BLACK, fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
-        self.btn_research.place(relx=0, rely=0.550, relwidth=1, relheight=0.175)
+        self.btn_research.place(relx=0, rely=0.37, relwidth=1, relheight=0.27)
 
         self.btn_exit = tk.Button(main_menu_frame, text="quitter", command=self.exit_ap,
                                   bd=2, activeforeground=RAISIN_BLACK, activebackground=MAIZE,
                                   bg=RAISIN_BLACK, fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
-        self.btn_exit.place(relx=0, rely=0.825, relwidth=1, relheight=0.175)
+        self.btn_exit.place(relx=0, rely=0.73, relwidth=1, relheight=0.27)
 
         self.window.mainloop()
 
