@@ -18,6 +18,7 @@ HELV_15_FONT = "Helvetica, 15"
 FUTURA_30_FONT = "Futura, 30"
 FUTURA_20_FONT = "Futura, 20"
 FUTURA_15_FONT = "Futura, 15"
+FUTURA_10_FONT = "Futura, 10"
 
 
 class MenuGUI:
@@ -74,16 +75,15 @@ class MenuGUI:
 
 
 class AlertPopUP:
-    def __init__(self, title, text, **kwargs):
+    def __init__(self, text, **kwargs):
         """
         :param kwargs:  btn1=dict(text=String, command=function)
                         btn2=dict(text=String, command=function)
         """
 
         self.popup = tk.Tk()
-        self.popup.title(title)
         self.popup.overrideredirect(1)
-        self.popup.configure(bg='#F5CB5C')
+        self.popup.configure(bg=MAIZE)
         ws = self.popup.winfo_screenwidth()  # width of the screen
         hs = self.popup.winfo_screenheight()  # height of the screen
         h = ws / 4
@@ -91,26 +91,33 @@ class AlertPopUP:
         x = (ws / 2) - (w / 2)
         y = (hs / 2) - (h / 2)
         self.popup.geometry('%dx%d+%d+%d' % (w, h, x, y))
-        self.popup_frame = tk.Frame(self.popup, bg='#F5CB5C')
+        self.popup_frame = tk.Frame(self.popup, bg=MAIZE)
         self.popup_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
-        self.label = tk.Label(self.popup_frame, text=text, bg='#F5CB5C', fg='#242423', anchor=tk.CENTER,
-                              font=FUTURA_20_FONT)
-        self.label.place(relx=0, rely=0, relwidth=1, relheight=0.27)
+
         if 'btn1' in kwargs:
-            self.B1 = tk.Button(self.popup_frame, text=kwargs['btn1']['text'], command=kwargs['btn1']['command'],
-                                activeforeground="#F5CB5C", activebackground="#333533",
-                                bg="#242423", fg="#E8EDDF", font=HELV_20_BUTTON_FONT)
-            self.B1.place(relx=0, rely=0.37, relwidth=1, relheight=0.27)
+            btn1_text = kwargs['btn1']['text']
+            btn1_y = 0.74
+            btn1_heigth = 0.27
         else:
-            self.B1 = tk.Button(self.popup_frame, text='OK', command=self.popup.destroy,
-                                activeforeground="#F5CB5C", activebackground="#333533",
-                                bg="#242423", fg="#E8EDDF", font=HELV_20_BUTTON_FONT)
-            self.B1.place(relx=0, rely=0.74, relwidth=1, relheight=0.27)
+            btn1_text = "ok"
+            btn1_y = 0.55
+            btn1_heigth = 0.45
+        self.B1 = tk.Button(self.popup_frame, text=btn1_text, command=self.popup.destroy,
+                            activeforeground=RAISIN_BLACK, activebackground=MAIZE,
+                            bg=RAISIN_BLACK, fg=MAIZE, font=HELV_20_BUTTON_FONT)
+        self.B1.place(relx=0, rely=btn1_y, relwidth=1, relheight=btn1_heigth)
         if 'btn2' in kwargs:
             self.B2 = tk.Button(self.popup_frame, text=kwargs['btn2']['text'], command=kwargs['btn2']['command'],
-                                activeforeground="#F5CB5C", activebackground="#333533",
-                                bg="#242423", fg="#E8EDDF", font=HELV_20_BUTTON_FONT)
-            self.B2.place(relx=0, rely=0.74, relwidth=1, relheight=0.27)
+                                activeforeground=RAISIN_BLACK, activebackground=MAIZE,
+                                bg=RAISIN_BLACK, fg=MAIZE, font=HELV_20_BUTTON_FONT)
+            self.B2.place(relx=0, rely=0.37, relwidth=1, relheight=0.27)
+            label_height = 0.27
+        else:
+            label_height = 0.45
+
+        self.label = tk.Label(self.popup_frame, text=text, bg=MAIZE, fg=RAISIN_BLACK, anchor=tk.CENTER,
+                              font=FUTURA_20_FONT)
+        self.label.place(relx=0, rely=0, relwidth=1, relheight=label_height)
 
         print('\a')
         self.popup.mainloop()
@@ -118,7 +125,6 @@ class AlertPopUP:
 
 
 class WorkbookGUI:
-    # TODO change return button size, switch second zone button color
 
     def __init__(self, workbook):
         self.workbook = workbook
@@ -154,7 +160,8 @@ class WorkbookGUI:
                         foreground=RAISIN_BLACK, font=HELV_15_FONT, relief="flat", anchor=tk.CENTER)
         style.map("Custom.Treeview.Heading",
                   relief=[('active', 'groove'), ('pressed', 'sunken')])
-        style.configure("Custom.Treeview", fieldbackground=GAINSBORO, fieldforeground=RAISIN_BLACK)
+        style.configure("Custom.Treeview", fieldbackground=GAINSBORO, fieldforeground=RAISIN_BLACK, font=FUTURA_10_FONT,
+                        background=GAINSBORO, foreground=RAISIN_BLACK, anchor=tk.CENTER)
         self.result_tree = ttk.Treeview(self.search_result_frame, columns=cols, style="Custom.Treeview")
         self.result_tree.place(relx=0, rely=0, relwidth=1, relheight=1)
         header_w = round(((ws / 2) * 0.8) / 6)
@@ -302,7 +309,7 @@ class WorkbookGUI:
         self.workbook_frame.destroy()
 
     def edit_film(self):  # TODO implement confirmation pop-up
-        InputFilmGUI(self.workbook, self)
+        InputFilmGUI(self.workbook, self, edit=True)
 
     def delete_film(self):  # TODO implement confirmation pop-up
         try:
@@ -312,7 +319,7 @@ class WorkbookGUI:
             self.workbook.remove_film(name, category)
             self.result_tree.delete(selected)
         except IndexError:  # TODO implement please select pop up
-            pass
+            AlertPopUP(text='Veuillez sélectionner\nun film')
 
     def save_search(self):  # TODO implement confirmation pop-up
         path = filedialog.asksaveasfile(initialdir="/", filetypes=[("Fichier CSV", "*.csv")])
@@ -349,14 +356,14 @@ class InputFilmGUI:
         """
         :param kwargs:
             add=True
-            edit=True TODO implement for readability
+            edit=True
         """
         self.workbook = workbook
         self.workbookGUI = workbookGUI
         self.film_frame = tk.Tk()
         if kwargs.get('add'):
             self.film_frame.title("Ajout d'un film")
-        else:
+        elif kwargs.get('edit'):
             self.film_frame.title("Modification d'un film")
         ws = self.film_frame.winfo_screenwidth()  # width of the screen
         hs = self.film_frame.winfo_screenheight()  # height of the screen
@@ -438,9 +445,9 @@ class InputFilmGUI:
         self.comment_label = tk.Label(self.category_comment_frame, bg=JET, fg=GAINSBORO, font=FUTURA_20_FONT,
                                       text="commentaire", anchor="w")
         self.comment_label.place(relx=0, rely=0, relwidth=1, relheight=0.25)
-        self.comment_text = tk.Text(self.category_comment_frame, bd=0,
+        self.commentary_text = tk.Text(self.category_comment_frame, bd=0,
                                     bg=GAINSBORO, fg=JET, font=FUTURA_20_FONT)
-        self.comment_text.place(relx=0, rely=0.25, relwidth=1, relheight=0.75)
+        self.commentary_text.place(relx=0, rely=0.25, relwidth=1, relheight=0.75)
 
         if kwargs.get('add'):
             self.add_button = tk.Button(main_film_frame, text="ajouter",
@@ -549,9 +556,8 @@ class GestionCategGUI:
         self.set_active()
 
     def edit_category(self):
-        if self.category_combobox.get() == null:
-            # TODO add popup for no category selected
-            pass
+        if len(self.category_combobox.get()) == 0:
+            AlertPopUP(text='Veuillez sélectionner\nune catéorie')
         else:
             ModifyAddCategory(self.workbook, category_to_change=self.category_combobox.get())
 
