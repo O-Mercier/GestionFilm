@@ -28,21 +28,23 @@ class Workbook:
         """
         self.category_dict.get(category).add_film(name, year, **kwargs)
 
-    def edit_film(self, current_category, name, **kwargs):
+    def edit_film(self, current_category, current_name, **kwargs):
         """
        :param kwargs:
-            category= str
-            director= str
-            actors=  list[str]
-            rating= int < 10
-            comment= str
+            name=str
+            category=str
+            director=str
+            actors=list[str]
+            rating=int < 10
+            comment=str
         """
         if 'category' in kwargs:
             current_categ = self.category_dict.get(current_category)
             categ = self.category_dict.get(kwargs.get('category'))
-            categ.film_dict.update({name: current_categ.film_dict.pop(name)})
-            current_category = kwargs.get('category')
-        self.category_dict.get(current_category).edit_film(name, **kwargs)
+            categ.film_dict.update({current_name: current_categ.film_dict.pop(current_name)})
+            categ.film_dict.get(current_name).update(category=kwargs.get('category'))
+            current_category = kwargs.pop('category')
+        self.category_dict.get(current_category).edit_film(current_name, **kwargs)
 
     def remove_film(self, name, category):
         self.category_dict.get(category).film_dict.pop(name)
@@ -61,14 +63,14 @@ class Workbook:
         search_dict = dict()
         for key in self.category_dict.keys():
             if kwargs.get('all'):
-                for k in self.category_dict.keys():
-                    search_dict.update(self.category_dict[k].film_dict)
-            if 'category' in kwargs:
-                if kwargs.get('category') == key:
-                    search_dict.update(self.category_dict[key].film_dict)
-                    continue
+                search_dict.update(self.category_dict[key].film_dict)
             else:
-                search_dict.update(self.category_dict[key].find_films(**kwargs))
+                if'category' in kwargs:
+                    if kwargs.get('category') == key:
+                        search_dict.update(self.category_dict[key].film_dict)
+                        continue
+                else:
+                    search_dict.update(self.category_dict[key].find_films(**kwargs))
         return search_dict
 
     def open_workbook(self):
@@ -134,8 +136,11 @@ class Category:
         }
         )
 
-    def edit_film(self, name, **kwargs):
-        self.film_dict[name].update(kwargs)  # TODO unfuck update
+    def edit_film(self, current_name, **kwargs):
+        if kwargs.get('name'):
+            self.film_dict.update({kwargs.get('name'): self.film_dict.pop(current_name)})
+            current_name = kwargs.pop('name')
+        self.film_dict.get(current_name).update(kwargs)
 
     def find_films(self, **kwargs):
         search_dict = dict()
