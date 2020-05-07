@@ -93,6 +93,11 @@ class Workbook:
                     line_count += 1
         except FileNotFoundError:
             raise
+        if not self.category_dict:
+            self.category_dict = {'Action': Category('Action'),
+                                 'Drame': Category('Drame'),
+                                 'Comedie': Category('Comedie'),
+                                 'Documentaire': Category('Documentaire')}
 
     def save_workbook(self):
         to_write = list()

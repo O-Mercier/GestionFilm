@@ -51,19 +51,20 @@ class MenuGUI:
 
         self.window.mainloop()
 
-    def exit_ap(self):  # TODO implement saving
-        exit()
+    def exit_ap(self):
+        def exit_cmd():
+            self.workbook.save_workbook
+            exit()
+        AlertPopUP(text='Quitter et enregister? \n',
+                   btn1_text='oui',
+                   btn1_command=exit_cmd)
+
 
     def open_workbook(self):
         WorkbookGUI(self.workbook)
 
     def manage_category_frame(self):
         GestionCategGUI(self.workbook)
-
-    def debug_ph(self):
-        AlertPopUP('test', 'test message',
-                   btn1=dict(text='test', command=print('test')),
-                   btn2=dict(text='test', command=print('test')))
 
 
 class AlertPopUP:
@@ -117,7 +118,7 @@ class AlertPopUP:
         self.popup.mainloop()
         self.set_active()
 
-    def set_active(self):  # TODO bind update to enter?
+    def set_active(self):
         self.popup.lift()
         self.popup.focus_force()
         self.popup.grab_set()
@@ -290,7 +291,9 @@ class WorkbookGUI:
             self.result_tree.delete(element)
         self.update_parameter()
         if self.parameter_dict:
-            self.result_dict = self.workbook.find_films(**self.parameter_dict)  # TODO Pop-up if no result
+            self.result_dict = self.workbook.find_films(**self.parameter_dict)
+            if not self.result_dict:
+                AlertPopUP(text='Rien trouvé')
         else:
             self.result_dict = self.workbook.find_films(all=True)
         for k, v in self.result_dict.items():
@@ -299,7 +302,7 @@ class WorkbookGUI:
                                                                list(filter(lambda actor: actor, v.get('actors'))),
                                                                v.get('rating'), v.get('comment')])
 
-    def set_active(self):  # TODO bind update to enter?
+    def set_active(self):
         self.workbook_frame.lift()
         self.workbook_frame.focus_force()
         self.workbook_frame.grab_set()
@@ -308,33 +311,37 @@ class WorkbookGUI:
     def exit_window(self):
         self.workbook_frame.destroy()
 
-    def save_search(self):  # TODO implement confirmation pop-up
-        path = filedialog.asksaveasfile(initialdir="/", filetypes=[("Fichier CSV", "*.csv")])
+    def save_search(self):
+        path = filedialog.asksaveasfilename(filetypes=[('Fichier CSV', '*.csv')]) + '.csv'
         if path:
-            Workbook.save_search(path.name + '.csv', self.results_dict)
-            self.exit_window()
+            Workbook.save_search(path, self.result_dict)
+        self.set_active()
 
-    def delete_film(self):  # TODO implement confirmation pop-up
+    def delete_film(self):
+        def del_command():
+            self.result_tree.delete(selected)
         try:
             selected = self.result_tree.focus()
             name = self.result_tree.item(selected).get('text')
             category = self.result_tree.item(selected).get('values')[1]
             self.workbook.remove_film(name, category)
+            AlertPopUP(text='Voulez-vous bien suprimer:\n' + name,
+                       btn1_text='oui',
+                       btn1_command=del_command)
             self.result_tree.delete(selected)
-        except IndexError:  # TODO implement please select pop up
+        except IndexError:
             AlertPopUP(text='Veuillez sélectionner\nun film')
 
     def add_film(self):
         InputFilmGUI(self.workbook, self, add=True)
 
     def edit_film(self):
-        try:
-            self.result_tree.focus()
+        if not self.result_tree.focus():
+            AlertPopUP(text='Veuillez sélectionner\nun film')
+        else:
             InputFilmGUI(self.workbook, self, edit=True)
-        except IndexError:  # TODO implement please select pop up
-            pass
 
-    def clear_inputs(self):  # TODO implement method
+    def clear_inputs(self):
         self.parameter_dict = dict()
         self.tittle_entry.delete(0, 'end')
         self.year_entry.delete(0, 'end')
@@ -347,21 +354,20 @@ class WorkbookGUI:
         self.update_tree()
 
     def update_parameter(self):
-        if self.tittle_entry.get():
+        if self.tittle_entry.get() or self.year_entry.get() or self.director_entry.get()  \
+            or self.actor1_entry.get() or self.actor2_entry.get() or self.actor3_entry.get() \
+                or self.category_combobox.get() or self.rating_combobox.get():
             self.parameter_dict.update(name=self.tittle_entry.get())
-        if self.year_entry.get():
             self.parameter_dict.update(year=self.year_entry.get())
-        if self.director_entry.get():
             self.parameter_dict.update(name=self.director_entry.get())
-        if self.actor1_entry.get() or self.actor2_entry.get() or self.actor3_entry.get():
             self.parameter_dict.update(actors=[entry.get() for entry in
                                                [self.actor1_entry,
                                                 self.actor2_entry,
                                                 self.actor3_entry] if entry.get()])
-        if self.category_combobox.get():
             self.parameter_dict.update(category=self.category_combobox.get())
-        if self.rating_combobox.get():
             self.parameter_dict.update(rating=self.rating_combobox.get())
+        else:
+            self.parameter_dict = dict()
 
 
 class InputFilmGUI:
@@ -512,6 +518,8 @@ class InputFilmGUI:
             AlertPopUP(text='Veuillez entrer\nun nom')
         elif not self.year_entry.get():
             AlertPopUP(text='Veuillez entrer\nune année')
+        elif not self.year_entry.get().isdigit():
+            AlertPopUP(text='Veuillez entrer\nune année valide')
         elif not self.category_combobox.get():
             AlertPopUP(text='Veuillez choisir\nune catégorie')
         else:
