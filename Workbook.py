@@ -18,6 +18,10 @@ class Workbook:
     def remove_category(self, name):
         del self.category_dict[name]
 
+    def edit_category(self, current_name, new_name):
+        self.category_dict.update(new_name, self.category_dict.pop(current_name))
+        self.category_dict.get(new_name).rename_category(new_name)
+
     def add_film(self, category, name, year, **kwargs):
         """
         :param kwargs:
@@ -125,6 +129,11 @@ class Category:
         self.name = name
         self.film_dict = dict()
 
+    def rename_category(self, new_name):
+        self.name = new_name
+        for key in self.film_dict.keys():
+            self.film_dict.get(key).update({'category': str(self.name)})
+
     def add_film(self, name, year, **kwargs):
         self.film_dict.update({name: {
             'year': year,
@@ -133,14 +142,16 @@ class Category:
             'actors': kwargs.get('actors'),
             'rating': kwargs.get('rating'),
             'comment': kwargs.get('comment')}
-        }
-        )
+        })
 
     def edit_film(self, current_name, **kwargs):
         if kwargs.get('name'):
             self.film_dict.update({kwargs.get('name'): self.film_dict.pop(current_name)})
             current_name = kwargs.pop('name')
         self.film_dict.get(current_name).update(kwargs)
+
+    def remove_films(self, name):
+        del self.film_dict[name]
 
     def find_films(self, **kwargs):
         search_dict = dict()
@@ -155,10 +166,6 @@ class Category:
                 elif v == value.get(k):
                     search_dict[key] = value
         return search_dict
-
-    def remove_films(self, name):
-        del self.film_dict[name]
-
 
 if __name__ == "__main__":
     debug_workbook = Workbook()
