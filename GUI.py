@@ -1,9 +1,6 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import filedialog
-
-from asn1crypto._ffi import null
-
 from Workbook import Workbook
 
 GAINSBORO = "#E8EDDF"
@@ -585,7 +582,6 @@ class GestionCategGUI:
                              bd=0, activeforeground=RAISIN_BLACK, activebackground=MAIZE, bg=RAISIN_BLACK,
                              fg=MAIZE, font=HELV_20_BUTTON_FONT)
         btn_exit.place(relx=0.55, rely=0.85, relwidth=0.25, relheight=0.075)
-
         self.set_active()
 
     def edit_category(self):
@@ -595,7 +591,8 @@ class GestionCategGUI:
             ModifyAddCategory(self.workbook, category_to_change=self.category_combobox.get())
 
     def add_category(self):
-        ModifyAddCategory(self.workbook, add=True)
+        ModifyAddCategory(self.workbook, self, add=True)
+        self.category_combobox['values'] = list(self.workbook.category_dict.keys())
 
     def exit_window(self):
         self.manage_window.destroy()
@@ -608,7 +605,8 @@ class GestionCategGUI:
 
 
 class ModifyAddCategory:
-    def __init__(self, workbook, **kwargs):
+    def __init__(self, workbook, gui, **kwargs):
+        self.gui = gui
         self.workbook = workbook
         self.window = tk.Tk()
         ws = self.window.winfo_screenwidth()
@@ -625,6 +623,7 @@ class ModifyAddCategory:
             title = "ajouter une catégorie"
             label_text = "nouvelle catégorie"
             button_text = "ajouter"
+            cmd = self.add_category
             label_x = 0
             label_y = 0
             label_height = 0.1
@@ -636,6 +635,7 @@ class ModifyAddCategory:
             title = "mofifier une catégorie"
             label_text = "nouveau nom de " + kwargs.get('category_to_change')
             button_text = "modifier"
+            cmd = self.edit_category()
             label_x = 0
             label_y = 0
             label_height = 0.1
@@ -654,7 +654,8 @@ class ModifyAddCategory:
         self.action_button = tk.Button(edit_add_frame, text=button_text,
                                        bd=2, activeforeground=RAISIN_BLACK, activebackground=GAINSBORO,
                                        bg=RAISIN_BLACK,
-                                       fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
+                                       fg=GAINSBORO, font=HELV_30_BUTTON_FONT,
+                                       command=cmd)
         self.action_button.place(relx=button_x, rely=button_y, relwidth=1, relheight=0.25)
 
         self.action_button = tk.Button(edit_add_frame, text="retour", command=self.exit_window,
@@ -662,6 +663,14 @@ class ModifyAddCategory:
                                        bg=RAISIN_BLACK,
                                        fg=MAIZE, font=HELV_30_BUTTON_FONT)
         self.action_button.place(relx=0, rely=0.75, relwidth=1, relheight=0.25)
+
+    def edit_category(self):
+        pass
+
+    def add_category(self):
+        self.workbook.add_category(self.title_entry.get())
+        self.gui.category_combobox['values'] = list(self.workbook.category_dict.keys())
+        self.exit_window()
 
     def exit_window(self):
         self.window.destroy()
