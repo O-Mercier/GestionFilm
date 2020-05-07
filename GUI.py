@@ -364,7 +364,7 @@ class WorkbookGUI:
             self.parameter_dict.update(rating=self.rating_combobox.get())
 
 
-class InputFilmGUI:  # TODO implement confirmation pop-up
+class InputFilmGUI:
     def __init__(self, workbook, workbookGUI, **kwargs):
         """
         :param kwargs:
@@ -390,11 +390,11 @@ class InputFilmGUI:  # TODO implement confirmation pop-up
         main_film_frame.place(relx=0.15, rely=0.15, relwidth=0.7, relheight=0.7)
         self.title_film_frame = tk.Frame(main_film_frame, background=GAINSBORO)
         self.title_film_frame.place(relx=0, rely=0, relwidth=1, relheight=0.05)
-        self.tittle_label = tk.Label(self.title_film_frame, bg=JET, fg=GAINSBORO, font=FUTURA_20_FONT,
-                                     text="titre", anchor="w")
-        self.tittle_label.place(relx=0, rely=0, relwidth=0.3, relheight=1)
-        self.tittle_entry = tk.Entry(self.title_film_frame, bg=GAINSBORO, fg=JET, font=FUTURA_20_FONT, justify='center')
-        self.tittle_entry.place(relx=0.3, rely=0, relwidth=0.7, relheight=1)
+        self.title_label = tk.Label(self.title_film_frame, bg=JET, fg=GAINSBORO, font=FUTURA_20_FONT,
+                                    text="titre", anchor="w")
+        self.title_label.place(relx=0, rely=0, relwidth=0.3, relheight=1)
+        self.title_entry = tk.Entry(self.title_film_frame, bg=GAINSBORO, fg=JET, font=FUTURA_20_FONT, justify='center')
+        self.title_entry.place(relx=0.3, rely=0, relwidth=0.7, relheight=1)
         # frame pour la saisie de la date de création
         self.year_film_frame = tk.Frame(main_film_frame, background=JET)
         self.year_film_frame.place(relx=0, rely=0.075, relwidth=1, relheight=0.05)
@@ -458,19 +458,19 @@ class InputFilmGUI:  # TODO implement confirmation pop-up
         self.comment_label = tk.Label(self.category_comment_frame, bg=JET, fg=GAINSBORO, font=FUTURA_20_FONT,
                                       text="commentaire", anchor="w")
         self.comment_label.place(relx=0, rely=0, relwidth=1, relheight=0.25)
-        self.commentary_text = tk.Text(self.category_comment_frame, bd=0,
+        self.comment_text = tk.Text(self.category_comment_frame, bd=0,
                                        bg=GAINSBORO, fg=JET, font=FUTURA_20_FONT)
         self.comment_text.place(relx=0, rely=0.25, relwidth=1, relheight=0.75)
         if kwargs.get('edit'):
             self.edit_button = tk.Button(main_film_frame, text="modifier",
                                          bd=2, activeforeground=GAINSBORO, activebackground=JET,
                                          bg=GAINSBORO, fg=JET, font=HELV_20_BUTTON_FONT,
-                                         command=self.edit_film_ctr)
+                                         command=self.edit_film_confirmation)
             self.edit_button.place(relx=0, rely=0.9, relheight=0.1, relwidth=1)
             selected = workbookGUI.result_tree.focus()
             self.name = workbookGUI.result_tree.item(selected).get('text')
             self.category = workbookGUI.result_tree.item(selected).get('values')[1]
-            self.tittle_entry.insert(0, self.name)
+            self.title_entry.insert(0, self.name)
             self.year_entry.insert(0,
                                    str(workbook.category_dict.get(self.category).film_dict.get(self.name).get('year')))
             self.director_entry.insert(0, workbook.category_dict.get(self.category).film_dict.get(self.name).get(
@@ -498,7 +498,7 @@ class InputFilmGUI:  # TODO implement confirmation pop-up
             self.add_button = tk.Button(main_film_frame, text="ajouter",
                                         bd=2, activeforeground=GAINSBORO, activebackground=JET,
                                         bg=GAINSBORO, fg=JET, font=HELV_20_BUTTON_FONT,
-                                        command=self.add_film_ctr)
+                                        command=self.add_film_confirmation)
             self.add_button.place(relx=0, rely=0.9, relheight=0.1, relwidth=0.6)
         self.cancel_button = tk.Button(main_film_frame, text="annuler",
                                        bd=0, activeforeground=JET, activebackground=MAIZE,
@@ -507,9 +507,21 @@ class InputFilmGUI:  # TODO implement confirmation pop-up
         self.cancel_button.place(relx=0.7, rely=0.9, relheight=0.1, relwidth=0.3)
         self.set_active()
 
-    def add_film_ctr(self):
-        self.workbook.add_film(self.category_combobox.get(),  # TODO implement pop up if missing name or year
-                               self.tittle_entry.get(),
+    def add_film_confirmation(self):
+        if not self.title_entry.get():
+            AlertPopUP(text='Veuillez entrer\nun nom')
+        elif not self.year_entry.get():
+            AlertPopUP(text='Veuillez entrer\nune année')
+        elif not self.category_combobox.get():
+            AlertPopUP(text='Veuillez choisir\nune catégorie')
+        else:
+            AlertPopUP(text='Voulez-vous bien ajouter:\n' + self.title_entry.get(),
+                       btn1_text='oui',
+                       btn1_command=self.add_film)
+
+    def add_film(self):
+        self.workbook.add_film(self.category_combobox.get(),
+                               self.title_entry.get(),
                                self.year_entry.get(),
                                director=self.director_entry.get(),
                                actors=[self.actor1_entry.get(), self.actor2_entry.get(), self.actor3_entry.get()],
@@ -518,14 +530,26 @@ class InputFilmGUI:  # TODO implement confirmation pop-up
         self.workbookGUI.update_tree()
         self.exit_window()
 
-    def edit_film_ctr(self):
+    def edit_film_confirmation(self):
+        if not self.title_entry.get():
+            AlertPopUP(text='Veuillez entrer\nun nom')
+        elif not self.year_entry.get():
+            AlertPopUP(text='Veuillez entrer\nune année')
+        elif not self.category_combobox.get():
+            AlertPopUP(text='Veuillez choisir\nune catégorie')
+        else:
+            AlertPopUP(text='Voulez-vous bien modifier:\n' + self.name,
+                       btn1_text='oui',
+                       btn1_command=self.edit_film)
+
+    def edit_film(self):
         kwargs = dict(year=self.year_entry.get(),
                       director=self.director_entry.get(),
                       actors=[self.actor1_entry.get(), self.actor2_entry.get(), self.actor3_entry.get()],
                       rating=self.rating_combobox.get(),
                       comment=self.comment_text.get('1.0', tk.END))
-        if self.name != self.tittle_entry.get():
-            kwargs.update(name=self.tittle_entry.get())
+        if self.name != self.title_entry.get():
+            kwargs.update(name=self.title_entry.get())
         if self.category != self.category_combobox.get():
             kwargs.update(category=self.category_combobox.get())
         self.workbook.edit_film(self.category, self.name, **kwargs)
@@ -573,7 +597,7 @@ class GestionCategGUI:
         self.category_combobox.current(0)
         self.category_combobox['state'] = 'readonly'
         self.category_combobox.place(relx=0, rely=0.125, relwidth=1, relheight=0.15)
-        self.category_combobox.current(0)
+        self.category_combobox.set('')
         btn_add_category = tk.Button(manage_main_frame, text="ajouter une catégorie",
                                      command=self.add_category,
                                      bd=2, activeforeground=RAISIN_BLACK, activebackground=GAINSBORO, bg=RAISIN_BLACK,
