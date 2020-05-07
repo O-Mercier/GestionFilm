@@ -19,7 +19,7 @@ class Workbook:
         del self.category_dict[name]
 
     def edit_category(self, current_name, new_name):
-        self.category_dict.update(new_name, self.category_dict.pop(current_name))
+        self.category_dict.update({new_name: self.category_dict.pop(current_name)})
         self.category_dict.get(new_name).rename_category(new_name)
 
     def add_film(self, category, name, year, **kwargs):

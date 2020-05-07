@@ -69,10 +69,10 @@ class MenuGUI:
 class AlertPopUP:
     def __init__(self, text, **kwargs):
         """
-        :param kwargs:  btn1=dict(text=String, command=function)
-                        btn2=dict(text=String, command=function)
+        :param kwargs:
+            btn1_text=String
+            btn1_command=function
         """
-
         self.popup = tk.Tk()
         self.popup.overrideredirect(1)
         self.popup.configure(bg=MAIZE)
@@ -86,27 +86,29 @@ class AlertPopUP:
         self.popup_frame = tk.Frame(self.popup, bg=MAIZE)
         self.popup_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
 
-        if 'btn1' in kwargs:
-            btn1_text = kwargs['btn1']['text']
+        if 'btn1_text' in kwargs:
+            def btn1_cmd():
+                kwargs.get('btn1_command')()
+                self.popup.destroy()
+
+            btn1_text = kwargs.get('btn1_text')
             btn1_y = 0.74
             btn1_heigth = 0.27
-        else:
-            btn1_text = "ok"
-            btn1_y = 0.55
-            btn1_heigth = 0.45
-        self.B1 = tk.Button(self.popup_frame, text=btn1_text, command=self.popup.destroy,
-                            activeforeground=RAISIN_BLACK, activebackground=MAIZE,
-                            bg=RAISIN_BLACK, fg=MAIZE, font=HELV_20_BUTTON_FONT)
-        self.B1.place(relx=0, rely=btn1_y, relwidth=1, relheight=btn1_heigth)
-        if 'btn2' in kwargs:
-            self.B2 = tk.Button(self.popup_frame, text=kwargs['btn2']['text'], command=kwargs['btn2']['command'],
+            self.B2 = tk.Button(self.popup_frame, text='annuler', command=self.popup.destroy,
                                 activeforeground=RAISIN_BLACK, activebackground=MAIZE,
                                 bg=RAISIN_BLACK, fg=MAIZE, font=HELV_20_BUTTON_FONT)
             self.B2.place(relx=0, rely=0.37, relwidth=1, relheight=0.27)
             label_height = 0.27
         else:
+            btn1_text = "ok"
+            btn1_y = 0.55
+            btn1_heigth = 0.45
+            btn1_cmd = self.popup.destroy
             label_height = 0.45
-
+        self.B1 = tk.Button(self.popup_frame, text=btn1_text, command=btn1_cmd,
+                            activeforeground=RAISIN_BLACK, activebackground=MAIZE,
+                            bg=RAISIN_BLACK, fg=MAIZE, font=HELV_20_BUTTON_FONT)
+        self.B1.place(relx=0, rely=btn1_y, relwidth=1, relheight=btn1_heigth)
         self.label = tk.Label(self.popup_frame, text=text, bg=MAIZE, fg=RAISIN_BLACK, anchor=tk.CENTER,
                               font=FUTURA_20_FONT)
         self.label.place(relx=0, rely=0, relwidth=1, relheight=label_height)
@@ -115,9 +117,14 @@ class AlertPopUP:
         self.popup.mainloop()
         self.set_active()
 
+    def set_active(self):  # TODO bind update to enter?
+        self.popup.lift()
+        self.popup.focus_force()
+        self.popup.grab_set()
+        self.popup.grab_release()
+
 
 class WorkbookGUI:
-
     def __init__(self, workbook):
         self.workbook = workbook
         self.parameter_dict = dict()
@@ -301,7 +308,6 @@ class WorkbookGUI:
     def exit_window(self):
         self.workbook_frame.destroy()
 
-
     def save_search(self):  # TODO implement confirmation pop-up
         path = filedialog.asksaveasfile(initialdir="/", filetypes=[("Fichier CSV", "*.csv")])
         if path:
@@ -358,7 +364,7 @@ class WorkbookGUI:
             self.parameter_dict.update(rating=self.rating_combobox.get())
 
 
-class InputFilmGUI: # TODO implement confirmation pop-up
+class InputFilmGUI:  # TODO implement confirmation pop-up
     def __init__(self, workbook, workbookGUI, **kwargs):
         """
         :param kwargs:
@@ -453,7 +459,7 @@ class InputFilmGUI: # TODO implement confirmation pop-up
                                       text="commentaire", anchor="w")
         self.comment_label.place(relx=0, rely=0, relwidth=1, relheight=0.25)
         self.commentary_text = tk.Text(self.category_comment_frame, bd=0,
-                                    bg=GAINSBORO, fg=JET, font=FUTURA_20_FONT)
+                                       bg=GAINSBORO, fg=JET, font=FUTURA_20_FONT)
         self.comment_text.place(relx=0, rely=0.25, relwidth=1, relheight=0.75)
         if kwargs.get('edit'):
             self.edit_button = tk.Button(main_film_frame, text="modifier",
@@ -465,23 +471,29 @@ class InputFilmGUI: # TODO implement confirmation pop-up
             self.name = workbookGUI.result_tree.item(selected).get('text')
             self.category = workbookGUI.result_tree.item(selected).get('values')[1]
             self.tittle_entry.insert(0, self.name)
-            self.year_entry.insert(0,  str(workbook.category_dict.get(self.category).film_dict.get(self.name).get('year')))
-            self.director_entry.insert(0, workbook.category_dict.get(self.category).film_dict.get(self.name).get('director'))
+            self.year_entry.insert(0,
+                                   str(workbook.category_dict.get(self.category).film_dict.get(self.name).get('year')))
+            self.director_entry.insert(0, workbook.category_dict.get(self.category).film_dict.get(self.name).get(
+                'director'))
             try:
-                self.actor1_entry.insert(0, workbook.category_dict.get(self.category).film_dict.get(self.name).get('actors')[0])
+                self.actor1_entry.insert(0, workbook.category_dict.get(self.category).film_dict.get(self.name).get(
+                    'actors')[0])
             except IndexError:
                 self.actor1_entry.insert(0, '')
             try:
-                self.actor2_entry.insert(0, workbook.category_dict.get(self.category).film_dict.get(self.name).get('actors')[1])
+                self.actor2_entry.insert(0, workbook.category_dict.get(self.category).film_dict.get(self.name).get(
+                    'actors')[1])
             except IndexError:
                 self.actor2_entry.insert(0, '')
             try:
-                self.actor3_entry.insert(0, workbook.category_dict.get(self.category).film_dict.get(self.name).get('actors')[2])
+                self.actor3_entry.insert(0, workbook.category_dict.get(self.category).film_dict.get(self.name).get(
+                    'actors')[2])
             except IndexError:
                 self.actor3_entry.insert(0, '')
             self.category_combobox.set(self.category)
             self.rating_combobox.set(workbook.category_dict.get(self.category).film_dict.get(self.name).get('rating'))
-            self.comment_text.insert(tk.INSERT, workbook.category_dict.get(self.category).film_dict.get(self.name).get('comment'))
+            self.comment_text.insert(tk.INSERT,
+                                     workbook.category_dict.get(self.category).film_dict.get(self.name).get('comment'))
         elif kwargs.get('add'):
             self.add_button = tk.Button(main_film_frame, text="ajouter",
                                         bd=2, activeforeground=GAINSBORO, activebackground=JET,
@@ -508,10 +520,10 @@ class InputFilmGUI: # TODO implement confirmation pop-up
 
     def edit_film_ctr(self):
         kwargs = dict(year=self.year_entry.get(),
-                                director=self.director_entry.get(),
-                                actors=[self.actor1_entry.get(), self.actor2_entry.get(), self.actor3_entry.get()],
-                                rating=self.rating_combobox.get(),
-                                comment=self.comment_text.get('1.0', tk.END))
+                      director=self.director_entry.get(),
+                      actors=[self.actor1_entry.get(), self.actor2_entry.get(), self.actor3_entry.get()],
+                      rating=self.rating_combobox.get(),
+                      comment=self.comment_text.get('1.0', tk.END))
         if self.name != self.tittle_entry.get():
             kwargs.update(name=self.tittle_entry.get())
         if self.category != self.category_combobox.get():
@@ -558,21 +570,25 @@ class GestionCategGUI:
         self.category_label.place(relx=0, rely=0, relwidth=1, relheight=0.1)
         self.category_combobox = ttk.Combobox(manage_main_frame, values=list(self.workbook.category_dict.keys()),
                                               font=FUTURA_30_FONT, justify='center')
+        self.category_combobox.current(0)
         self.category_combobox['state'] = 'readonly'
         self.category_combobox.place(relx=0, rely=0.125, relwidth=1, relheight=0.15)
-
-        btn_add_category = tk.Button(manage_main_frame, text="ajouter une catégorie", command=self.add_category,
+        self.category_combobox.current(0)
+        btn_add_category = tk.Button(manage_main_frame, text="ajouter une catégorie",
+                                     command=self.add_category,
                                      bd=2, activeforeground=RAISIN_BLACK, activebackground=GAINSBORO, bg=RAISIN_BLACK,
                                      fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
         btn_add_category.place(relx=0, rely=0.4, relwidth=1, relheight=0.167)
 
-        btn_modify_category = tk.Button(manage_main_frame, text="modifier une catégorie", command=self.edit_category,
+        btn_modify_category = tk.Button(manage_main_frame, text="modifier une catégorie",
+                                        command=self.edit_category,
                                         bd=2, activeforeground=RAISIN_BLACK, activebackground=GAINSBORO,
                                         bg=RAISIN_BLACK,
                                         fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
         btn_modify_category.place(relx=0, rely=0.617, relwidth=1, relheight=0.167)
 
         btn_remove_category = tk.Button(manage_main_frame, text="supprimer une catégorie",
+                                        command=self.delete_category_confirmation,
                                         bd=2, activeforeground=RAISIN_BLACK, activebackground=GAINSBORO,
                                         bg=RAISIN_BLACK,
                                         fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
@@ -585,14 +601,27 @@ class GestionCategGUI:
         self.set_active()
 
     def edit_category(self):
-        if len(self.category_combobox.get()) == 0:
+        if not self.category_combobox.get():
             AlertPopUP(text='Veuillez sélectionner\nune catéorie')
         else:
-            ModifyAddCategory(self.workbook, category_to_change=self.category_combobox.get())
+            ModifyAddCategory(self.workbook, self, category_to_change=self.category_combobox.get())
 
     def add_category(self):
         ModifyAddCategory(self.workbook, self, add=True)
         self.category_combobox['values'] = list(self.workbook.category_dict.keys())
+
+    def delete_category_confirmation(self):
+        if not self.category_combobox.get():
+            AlertPopUP(text='Veuillez sélectionner\nune catéorie')
+        else:
+            AlertPopUP(text='Voulez-vous bien supprimer:\n' + self.category_combobox.get(),
+                       btn1_text='oui',
+                       btn1_command=self.delete_category)
+
+    def delete_category(self):
+        self.workbook.remove_category(self.category_combobox.get())
+        self.category_combobox['values'] = list(self.workbook.category_dict.keys())
+        self.category_combobox.set('')
 
     def exit_window(self):
         self.manage_window.destroy()
@@ -609,6 +638,7 @@ class ModifyAddCategory:
         self.gui = gui
         self.workbook = workbook
         self.window = tk.Tk()
+        self.original_name = kwargs.get('category_to_change')
         ws = self.window.winfo_screenwidth()
         hs = self.window.winfo_screenheight()
         h = ws / 2
@@ -623,7 +653,7 @@ class ModifyAddCategory:
             title = "ajouter une catégorie"
             label_text = "nouvelle catégorie"
             button_text = "ajouter"
-            cmd = self.add_category
+            cmd = self.add_category_confirmation
             label_x = 0
             label_y = 0
             label_height = 0.1
@@ -633,9 +663,9 @@ class ModifyAddCategory:
             button_y = 0.45
         else:
             title = "mofifier une catégorie"
-            label_text = "nouveau nom de " + kwargs.get('category_to_change')
+            label_text = "nouveau nom de " + self.original_name
             button_text = "modifier"
-            cmd = self.edit_category()
+            cmd = self.edit_category_confirmation
             label_x = 0
             label_y = 0
             label_height = 0.1
@@ -664,12 +694,29 @@ class ModifyAddCategory:
                                        fg=MAIZE, font=HELV_30_BUTTON_FONT)
         self.action_button.place(relx=0, rely=0.75, relwidth=1, relheight=0.25)
 
+    def edit_category_confirmation(self):
+        AlertPopUP(text='Voulez-vous bien modifier:\n' + self.original_name,
+                   btn1_text='oui',
+                   btn1_command=self.edit_category)
+
     def edit_category(self):
-        pass
+        self.workbook.edit_category(self.gui.category_combobox.get(), self.title_entry.get())
+        self.gui.category_combobox['values'] = list(self.workbook.category_dict.keys())
+        self.gui.category_combobox.set('')
+        self.exit_window()
+
+    def add_category_confirmation(self):
+        if not self.title_entry.get():
+            AlertPopUP(text='Veuillez entrer\nun nom')
+        else:
+            AlertPopUP(text='Voulez-vous bien ajouter:\n' + self.title_entry.get(),
+                       btn1_text='oui',
+                       btn1_command=self.add_category)
 
     def add_category(self):
         self.workbook.add_category(self.title_entry.get())
         self.gui.category_combobox['values'] = list(self.workbook.category_dict.keys())
+        self.gui.category_combobox.set('')
         self.exit_window()
 
     def exit_window(self):
