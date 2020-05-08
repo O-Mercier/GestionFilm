@@ -19,7 +19,7 @@ FUTURA_10_FONT = "Futura, 10"
 
 
 class MenuGUI:
-    def __init__(self, workbook):
+    def __init__(self, workbook):  # Construit la fenetre de menu et demare le thread tkinter
         self.workbook = workbook
         self.window = tk.Tk()
         self.window.title("Gestionnaire de films")
@@ -33,8 +33,7 @@ class MenuGUI:
         self.window.configure(background=RAISIN_BLACK)
         main_menu_frame = tk.Frame(self.window, bg=RAISIN_BLACK)
         main_menu_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
-
-        self.btn_category = tk.Button(main_menu_frame, text="catégories", command=self.manage_category_frame,
+        self.btn_category = tk.Button(main_menu_frame, text="catégories", command=self.open_manage_category,
                                       bd=2, activeforeground=RAISIN_BLACK, activebackground=MAIZE,
                                       bg=RAISIN_BLACK, fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
         self.btn_category.place(relx=0, rely=0, relwidth=1, relheight=0.27)
@@ -48,26 +47,25 @@ class MenuGUI:
                                   bd=2, activeforeground=RAISIN_BLACK, activebackground=MAIZE,
                                   bg=RAISIN_BLACK, fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
         self.btn_exit.place(relx=0, rely=0.73, relwidth=1, relheight=0.27)
-
         self.window.mainloop()
 
-    def exit_ap(self):
-        def exit_cmd():
+    def exit_ap(self):  # ferme le programe et enregistre
+        def exit_cmd():  # Inner fucntion a passer en objet au pop-up
             self.workbook.save_workbook
             exit()
+
         AlertPopUP(text='Quitter et enregister? \n',
                    btn1_text='oui',
                    btn1_command=exit_cmd)
 
-
-    def open_workbook(self):
+    def open_workbook(self):  # ouvre une instance de WorkbookGUI
         WorkbookGUI(self.workbook)
 
-    def manage_category_frame(self):
+    def open_manage_category(self):  # ouvre une instance de GestionCategGUI
         GestionCategGUI(self.workbook)
 
 
-class AlertPopUP:
+class AlertPopUP:  # Classe qui construit un pop up d'avertissement ou de validation en fonction des kwargs
     def __init__(self, text, **kwargs):
         """
         :param kwargs:
@@ -86,7 +84,6 @@ class AlertPopUP:
         self.popup.geometry('%dx%d+%d+%d' % (w, h, x, y))
         self.popup_frame = tk.Frame(self.popup, bg=MAIZE)
         self.popup_frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
-
         if 'btn1_text' in kwargs:
             def btn1_cmd():
                 kwargs.get('btn1_command')()
@@ -113,19 +110,12 @@ class AlertPopUP:
         self.label = tk.Label(self.popup_frame, text=text, bg=MAIZE, fg=RAISIN_BLACK, anchor=tk.CENTER,
                               font=FUTURA_20_FONT)
         self.label.place(relx=0, rely=0, relwidth=1, relheight=label_height)
-
         print('\a')
         self.popup.mainloop()
-        self.set_active()
-
-    def set_active(self):
-        self.popup.lift()
-        self.popup.focus_force()
-        self.popup.grab_set()
-        self.popup.grab_release()
+        set_active(self.popup)
 
 
-class WorkbookGUI:
+class WorkbookGUI:  # Ouvre une instance du gestionaire de film interactif
     def __init__(self, workbook):
         self.workbook = workbook
         self.parameter_dict = dict()
@@ -147,15 +137,12 @@ class WorkbookGUI:
         self.search_result_frame.place(relx=0.4, rely=0, relwidth=0.6, relheight=0.8)
         style = ttk.Style(self.workbook_frame)
         style.element_create("Custom.Treeheading.border", "from", "default")
-        style.layout("Custom.Treeview.Heading", [
-            ("Custom.Treeheading.cell", {'sticky': 'nswe'}),
-            ("Custom.Treeheading.border", {'sticky': 'nswe', 'children': [
-                ("Custom.Treeheading.padding", {'sticky': 'nswe', 'children': [
-                    ("Custom.Treeheading.image", {'side': 'right', 'sticky': ''}),
-                    ("Custom.Treeheading.text", {'side': 'left', 'sticky': 'we'})
-                ]})
-            ]}),
-        ])
+        style.layout("Custom.Treeview.Heading", [("Custom.Treeheading.cell", {'sticky': 'nswe'}),
+                                                 ("Custom.Treeheading.border", {'sticky': 'nswe', 'children': [
+                                                     ("Custom.Treeheading.padding", {'sticky': 'nswe', 'children': [
+                                                         ("Custom.Treeheading.image", {'side': 'right', 'sticky': ''}),
+                                                         ("Custom.Treeheading.text",
+                                                          {'side': 'left', 'sticky': 'we'})]})]}), ])
         style.configure("Custom.Treeview.Heading", background=GAINSBORO,
                         foreground=RAISIN_BLACK, font=HELV_15_FONT, relief="flat", anchor=tk.CENTER)
         style.map("Custom.Treeview.Heading",
@@ -177,7 +164,6 @@ class WorkbookGUI:
         self.result_tree.heading('director', text="Réalisateur", anchor=tk.W)
         self.result_tree.heading('actors', text="Acteurs", anchor=tk.W)
         self.result_tree.heading('rating', text="Note", anchor=tk.W)
-
         self.search_frame = tk.Frame(self.main_frame, background=RAISIN_BLACK)
         self.search_frame.place(relx=0, rely=0, relwidth=0.35, relheight=0.8)
         self.title_film_frame = tk.Frame(self.search_frame, background=RAISIN_BLACK)
@@ -246,7 +232,7 @@ class WorkbookGUI:
                                             justify='center')
         self.rating_combobox['state'] = 'readonly'
         self.rating_combobox.place(relx=0.3, rely=0, relwidth=0.7, relheight=1)
-        self.search_button = tk.Button(self.search_frame, text="chercher", command=self.update_tree,
+        self.search_button = tk.Button(self.search_frame, text="chercher", command=self.ctr_update_tree,
                                        bd=2, activeforeground=RAISIN_BLACK, activebackground=GAINSBORO,
                                        bg=RAISIN_BLACK, fg=GAINSBORO, font=HELV_20_BUTTON_FONT)
         self.search_button.place(relx=0, rely=0.75, relwidth=1, relheight=0.1)
@@ -254,7 +240,6 @@ class WorkbookGUI:
                                       bd=2, activeforeground=RAISIN_BLACK, activebackground=GAINSBORO,
                                       bg=RAISIN_BLACK, fg=GAINSBORO, font=HELV_20_BUTTON_FONT)
         self.clear_button.place(relx=0, rely=0.9, relwidth=1, relheight=0.1)
-
         self.options_button_frame = tk.Frame(self.main_frame, background=RAISIN_BLACK)
         self.options_button_frame.place(relx=0, rely=0.85, relwidth=1, relheight=0.1)
         self.add_button = tk.Button(self.options_button_frame, text="ajouter film", command=self.add_film,
@@ -269,23 +254,21 @@ class WorkbookGUI:
         self.delete_button = tk.Button(self.options_button_frame, text="supprimer film",
                                        bd=2, activeforeground=RAISIN_BLACK, activebackground=GAINSBORO,
                                        bg=RAISIN_BLACK, fg=GAINSBORO, font=HELV_20_BUTTON_FONT,
-                                       command=self.delete_film)
+                                       command=self.ctr_delete_film)
         self.delete_button.place(relx=0.60, rely=0, relwidth=0.15, relheight=1)
         self.save_button = tk.Button(self.options_button_frame, text="exporter liste",
                                      bd=2, activeforeground=RAISIN_BLACK, activebackground=GAINSBORO,
                                      bg=RAISIN_BLACK, fg=GAINSBORO, font=HELV_20_BUTTON_FONT,
-                                     command=self.save_search)
+                                     command=self.crt_save_search)
         self.save_button.place(relx=0.80, rely=0, relwidth=0.2, relheight=1)
-
         self.cancel_button = tk.Button(self.workbook_frame, text="retour",
                                        bd=2, activeforeground=RAISIN_BLACK, activebackground=MAIZE,
                                        bg=RAISIN_BLACK, fg=MAIZE, font=HELV_20_BUTTON_FONT,
                                        command=self.exit_window)
         self.cancel_button.place(relx=0.74, rely=0.90, relwidth=0.16, relheight=0.05)
+        set_active(self.workbook_frame)
 
-        self.set_active()
-
-    def update_tree(self):
+    def ctr_update_tree(self):  # controleur pour l'interface d'affichage
         self.result_dict = dict()
         for element in self.result_tree.get_children():
             self.result_tree.delete(element)
@@ -302,24 +285,19 @@ class WorkbookGUI:
                                                                list(filter(lambda actor: actor, v.get('actors'))),
                                                                v.get('rating'), v.get('comment')])
 
-    def set_active(self):
-        self.workbook_frame.lift()
-        self.workbook_frame.focus_force()
-        self.workbook_frame.grab_set()
-        self.workbook_frame.grab_release()
-
     def exit_window(self):
         self.workbook_frame.destroy()
 
-    def save_search(self):
+    def crt_save_search(self):  # controleur sauvegarde de film
         path = filedialog.asksaveasfilename(filetypes=[('Fichier CSV', '*.csv')]) + '.csv'
         if path:
             Workbook.save_search(path, self.result_dict)
-        self.set_active()
+        set_active(self.workbook_frame)
 
-    def delete_film(self):
+    def ctr_delete_film(self):  # controleur effacement de film
         def del_command():
             self.result_tree.delete(selected)
+
         try:
             selected = self.result_tree.focus()
             name = self.result_tree.item(selected).get('text')
@@ -332,16 +310,16 @@ class WorkbookGUI:
         except IndexError:
             AlertPopUP(text='Veuillez sélectionner\nun film')
 
-    def add_film(self):
+    def add_film(self):  # ouvre une instance de InputFilmGUI add=True
         InputFilmGUI(self.workbook, self, add=True)
 
-    def edit_film(self):
+    def edit_film(self):  # ouvre une instance de InputFilmGUI edit=True
         if not self.result_tree.focus():
             AlertPopUP(text='Veuillez sélectionner\nun film')
         else:
             InputFilmGUI(self.workbook, self, edit=True)
 
-    def clear_inputs(self):
+    def clear_inputs(self):  # vide les champs de recherche
         self.parameter_dict = dict()
         self.tittle_entry.delete(0, 'end')
         self.year_entry.delete(0, 'end')
@@ -351,11 +329,11 @@ class WorkbookGUI:
         self.actor3_entry.delete(0, 'end')
         self.category_combobox.set('')
         self.rating_combobox.set('')
-        self.update_tree()
+        self.ctr_update_tree()
 
-    def update_parameter(self):
-        if self.tittle_entry.get() or self.year_entry.get() or self.director_entry.get()  \
-            or self.actor1_entry.get() or self.actor2_entry.get() or self.actor3_entry.get() \
+    def update_parameter(self):  # mets les parametre de recherche a jours a l'interne
+        if self.tittle_entry.get() or self.year_entry.get() or self.director_entry.get() \
+                or self.actor1_entry.get() or self.actor2_entry.get() or self.actor3_entry.get() \
                 or self.category_combobox.get() or self.rating_combobox.get():
             self.parameter_dict.update(name=self.tittle_entry.get())
             self.parameter_dict.update(year=self.year_entry.get())
@@ -370,7 +348,7 @@ class WorkbookGUI:
             self.parameter_dict = dict()
 
 
-class InputFilmGUI:
+class InputFilmGUI:   # ouvre une instance de la fenetre d'entré d'information de film, soit en mode edit ou add
     def __init__(self, workbook, workbookGUI, **kwargs):
         """
         :param kwargs:
@@ -465,7 +443,7 @@ class InputFilmGUI:
                                       text="commentaire", anchor="w")
         self.comment_label.place(relx=0, rely=0, relwidth=1, relheight=0.25)
         self.comment_text = tk.Text(self.category_comment_frame, bd=0,
-                                       bg=GAINSBORO, fg=JET, font=FUTURA_20_FONT)
+                                    bg=GAINSBORO, fg=JET, font=FUTURA_20_FONT)
         self.comment_text.place(relx=0, rely=0.25, relwidth=1, relheight=0.75)
         if kwargs.get('edit'):
             self.edit_button = tk.Button(main_film_frame, text="modifier",
@@ -511,9 +489,9 @@ class InputFilmGUI:
                                        bg=JET, fg=MAIZE, font=HELV_20_BUTTON_FONT,
                                        command=self.exit_window)
         self.cancel_button.place(relx=0.7, rely=0.9, relheight=0.1, relwidth=0.3)
-        self.set_active()
+        set_active(self.film_frame)
 
-    def add_film_confirmation(self):
+    def add_film_confirmation(self):  # fonction de validation de input
         if not self.title_entry.get():
             AlertPopUP(text='Veuillez entrer\nun nom')
         elif not self.year_entry.get():
@@ -525,20 +503,20 @@ class InputFilmGUI:
         else:
             AlertPopUP(text='Voulez-vous bien ajouter:\n' + self.title_entry.get(),
                        btn1_text='oui',
-                       btn1_command=self.add_film)
+                       btn1_command=self.crt_add_film)
 
-    def add_film(self):
+    def crt_add_film(self):  # controleur pour l'ajout de film
         self.workbook.add_film(self.category_combobox.get(),
-                               self.title_entry.get(),
-                               self.year_entry.get(),
-                               director=self.director_entry.get(),
-                               actors=[self.actor1_entry.get(), self.actor2_entry.get(), self.actor3_entry.get()],
-                               rating=self.rating_combobox.get(),
-                               comment=self.comment_text.get('1.0', tk.END))
-        self.workbookGUI.update_tree()
+                                   self.title_entry.get(),
+                                   self.year_entry.get(),
+                                   director=self.director_entry.get(),
+                                   actors=[self.actor1_entry.get(), self.actor2_entry.get(), self.actor3_entry.get()],
+                                   rating=self.rating_combobox.get(),
+                                   comment=self.comment_text.get('1.0', tk.END))
+        self.workbookGUI.ctr_update_tree()
         self.exit_window()
 
-    def edit_film_confirmation(self):
+    def edit_film_confirmation(self):  # fonction de validation de input
         if not self.title_entry.get():
             AlertPopUP(text='Veuillez entrer\nun nom')
         elif not self.year_entry.get():
@@ -548,9 +526,9 @@ class InputFilmGUI:
         else:
             AlertPopUP(text='Voulez-vous bien modifier:\n' + self.name,
                        btn1_text='oui',
-                       btn1_command=self.edit_film)
+                       btn1_command=self.crt_edit_film)
 
-    def edit_film(self):
+    def crt_edit_film(self): # controleur pour la modification de film
         kwargs = dict(year=self.year_entry.get(),
                       director=self.director_entry.get(),
                       actors=[self.actor1_entry.get(), self.actor2_entry.get(), self.actor3_entry.get()],
@@ -561,20 +539,14 @@ class InputFilmGUI:
         if self.category != self.category_combobox.get():
             kwargs.update(category=self.category_combobox.get())
         self.workbook.edit_film(self.category, self.name, **kwargs)
-        self.workbookGUI.update_tree()
+        self.workbookGUI.ctr_update_tree()
         self.exit_window()
 
     def exit_window(self):
         self.film_frame.destroy()
 
-    def set_active(self):
-        self.film_frame.lift()
-        self.film_frame.focus_force()
-        self.film_frame.grab_set()
-        self.film_frame.grab_release()
 
-
-class GestionCategGUI:
+class GestionCategGUI:  # instance d'une fenetre du gestionaire de catégorie
     def __init__(self, workbook):
         self.workbook = workbook
         self.manage_window = tk.Tk()
@@ -625,32 +597,31 @@ class GestionCategGUI:
                                         bg=RAISIN_BLACK,
                                         fg=GAINSBORO, font=HELV_30_BUTTON_FONT)
         btn_remove_category.place(relx=0, rely=0.833, relwidth=1, relheight=0.167)
-
         btn_exit = tk.Button(self.manage_window, text="retour", command=self.exit_window,
                              bd=0, activeforeground=RAISIN_BLACK, activebackground=MAIZE, bg=RAISIN_BLACK,
                              fg=MAIZE, font=HELV_20_BUTTON_FONT)
         btn_exit.place(relx=0.55, rely=0.85, relwidth=0.25, relheight=0.075)
-        self.set_active()
+        set_active(self.manage_window)
 
-    def edit_category(self):
+    def edit_category(self):  # ouvre une instance de ModifyAddCategory de type edit
         if not self.category_combobox.get():
             AlertPopUP(text='Veuillez sélectionner\nune catéorie')
         else:
-            ModifyAddCategory(self.workbook, self, category_to_change=self.category_combobox.get())
+            InputCategoryGUI(self.workbook, self, edit=True, name=self.category_combobox.get())
 
-    def add_category(self):
-        ModifyAddCategory(self.workbook, self, add=True)
+    def add_category(self): # ouvre une instance de InputCategoryGUI de type add
+        InputCategoryGUI(self.workbook, self, add=True)
         self.category_combobox['values'] = list(self.workbook.category_dict.keys())
 
-    def delete_category_confirmation(self):
+    def delete_category_confirmation(self):  # fonction de validation de input
         if not self.category_combobox.get():
             AlertPopUP(text='Veuillez sélectionner\nune catéorie')
         else:
             AlertPopUP(text='Voulez-vous bien supprimer:\n' + self.category_combobox.get(),
                        btn1_text='oui',
-                       btn1_command=self.delete_category)
+                       btn1_command=self.crt_delete_category)
 
-    def delete_category(self):
+    def crt_delete_category(self):  # controleur effacer des catégorie
         self.workbook.remove_category(self.category_combobox.get())
         self.category_combobox['values'] = list(self.workbook.category_dict.keys())
         self.category_combobox.set('')
@@ -658,19 +629,18 @@ class GestionCategGUI:
     def exit_window(self):
         self.manage_window.destroy()
 
-    def set_active(self):
-        self.manage_window.lift()
-        self.manage_window.focus_force()
-        self.manage_window.grab_set()
-        self.manage_window.grab_release()
 
-
-class ModifyAddCategory:
+class InputCategoryGUI:  # fenetre de input pour les catégorie soit en mode add ou edit
+    """
+            :param kwargs:
+                add=True
+                edit=True
+                name=str
+            """
     def __init__(self, workbook, gui, **kwargs):
         self.gui = gui
         self.workbook = workbook
         self.window = tk.Tk()
-        self.original_name = kwargs.get('category_to_change')
         ws = self.window.winfo_screenwidth()
         hs = self.window.winfo_screenheight()
         h = ws / 2
@@ -693,9 +663,10 @@ class ModifyAddCategory:
             entry_y = 0.12
             button_x = 0
             button_y = 0.45
-        else:
+        elif kwargs.get('edit'):
+            self.name = kwargs.get('name')
             title = "mofifier une catégorie"
-            label_text = "nouveau nom de " + self.original_name
+            label_text = "nouveau nom de " + self.name
             button_text = "modifier"
             cmd = self.edit_category_confirmation
             label_x = 0
@@ -705,7 +676,6 @@ class ModifyAddCategory:
             entry_y = 0.12
             button_x = 0
             button_y = 0.45
-
         self.window.title(title)
         self.label_title = tk.Label(edit_add_frame, bg=RAISIN_BLACK, fg=GAINSBORO, font=FUTURA_30_FONT,
                                     text=label_text, anchor="w")
@@ -725,27 +695,28 @@ class ModifyAddCategory:
                                        bg=RAISIN_BLACK,
                                        fg=MAIZE, font=HELV_30_BUTTON_FONT)
         self.action_button.place(relx=0, rely=0.75, relwidth=1, relheight=0.25)
+        set_active(self.window)
 
-    def edit_category_confirmation(self):
-        AlertPopUP(text='Voulez-vous bien modifier:\n' + self.original_name,
+    def edit_category_confirmation(self):  # fonction de validation de input
+        AlertPopUP(text='Voulez-vous bien modifier:\n' + self.name,
                    btn1_text='oui',
-                   btn1_command=self.edit_category)
+                   btn1_command=self.ctr_edit_category)
 
-    def edit_category(self):
+    def ctr_edit_category(self):  # controleur pour la modification
         self.workbook.edit_category(self.gui.category_combobox.get(), self.title_entry.get())
         self.gui.category_combobox['values'] = list(self.workbook.category_dict.keys())
         self.gui.category_combobox.set('')
         self.exit_window()
 
-    def add_category_confirmation(self):
+    def add_category_confirmation(self):  # fonction de validation de input
         if not self.title_entry.get():
             AlertPopUP(text='Veuillez entrer\nun nom')
         else:
             AlertPopUP(text='Voulez-vous bien ajouter:\n' + self.title_entry.get(),
                        btn1_text='oui',
-                       btn1_command=self.add_category)
+                       btn1_command=self.crt_add_category)
 
-    def add_category(self):
+    def crt_add_category(self): # controleur pour l'ajout
         self.workbook.add_category(self.title_entry.get())
         self.gui.category_combobox['values'] = list(self.workbook.category_dict.keys())
         self.gui.category_combobox.set('')
@@ -755,5 +726,8 @@ class ModifyAddCategory:
         self.window.destroy()
 
 
-if __name__ == "__main__":
-    debug_workbook_gui = MenuGUI(Workbook())
+def set_active(window):  # Fonction statique de fermeture de fenetre
+    window.lift()
+    window.focus_force()
+    window.grab_set()
+    window.grab_release()
